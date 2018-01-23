@@ -3,7 +3,6 @@ print("\nWelcome to the Interrogator Game\n")
 print("You are an investigator in charge of finding out who committed a murder. ")
 print("Your notepad contains the case file, list of suspects, and any notes you would like to take.")
 print("Press 'N' to bring up your notepad.")
-print("Press 'Q' to quit.")
 input1 = input('')
 
 while(input1!='Q'):
@@ -36,21 +35,16 @@ while(input1!='Q'):
         print("* Your Notes:                                                          *")
         print("*     -                                                                *")
         print("*                                                                      *")
-        print("* Press 'E' to edit your notes                                         *")
+        #print("* Press 'E' to edit your notes                                         *")
         #Edit does not work right now
         print("* Press 'C' to close your notepad                                      *")
         input1 = input('')
 
-    while(input1=='C'):
+    while((input1=='C') or (input1=='S') or (input1=='D')):
         print("\n" * 100)
         print("Press 'N' to bring up your notepad.")
         print("Press 'I' to interrogate a suspect.")
-        input1 = input('')
-
-    while(input1=='S'):
-        print("\n" * 100)
-        print("Press 'N' to bring up your notepad.")
-        print("Press 'I' to interrogate a suspect.")
+        print("Press 'E' to end interrogation.")
         input1 = input('')
 
     while(input1=='I'):
@@ -74,3 +68,15 @@ while(input1!='Q'):
             input1 = input('')
             if (input1=='S'):
                 inputName="Stop"
+
+    while(input1=='E'):
+        print("\n" * 100)
+        print("The interrogation is over.")
+        print("Who do you think committed the murder?")
+        inputGuess = input('')
+        if(inputGuess=="Todd Washington"):
+            print("You are correct! Good job!")
+            input1='Q'
+        if(inputGuess=="Brad Vanderbilt"):
+            print("You got it wrong. You are a failure.")
+            input1='Q'
