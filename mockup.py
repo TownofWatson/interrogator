@@ -5,6 +5,7 @@ print("Your notepad contains the case file, list of suspects, and any notes you 
 print("Press 'N' to bring up your notepad.")
 input1 = input('')
 
+
 while(input1!='Q'):
     while(input1=='N'):
         print("************************************************************************")
