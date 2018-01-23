@@ -3,6 +3,7 @@ print("\nWelcome to the Interrogator Game\n")
 print("You are an investigator in charge of finding out who committed a murder. ")
 print("Your notepad contains the case file, list of suspects, and any notes you would like to take.")
 print("Press 'N' to bring up your notepad.")
+print("Press 'Q' to quit.")
 input1 = input('')
 
 while(input1!='Q'):
