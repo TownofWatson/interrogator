@@ -1,0 +1,39 @@
+You see a disheveled, young man in a grey hoodie and sweatpants. As you walk in, he looks up nervously. Ask questions to figure out who murdered Brutus! Press S to stop talking to Brad Vanderbilt.
+You: Brad, where were you Saturday night?
+Brad: I-I was o-out… hanging out with friends. We went to watch S-star Wars at Gateway.
+You: What time was that?
+Brad: Maybe from 8-11:30? We all w-went home afterwards.
+You: Do you recall seeing the victim as you walked home?
+Brad: Y-yes! It was terrifying! I saw two people on the street f-fighting and yelling and all of a sudden, one of them pulls out a gun and shoots the other g-guy in the head!
+You: And what did you do then?
+Brad: Well, after that, I-I walked up to the guy to see if he was okay, but then p-police sirens came. I was so s-scared, I ran! But I swear, I didn’t do it!
+You: What did the guy look like?
+Brad: I c-couldn’t see too well, but he looked 
+You: Is there anyone who can confirm this?
+Brad: W-well… no. No one walked home with me.
+You: S
+
+In the other interrogation room, you see a young man with gelled up hair, wearing a sweater vest, khaki pants and a pair of Vans. Ask questions to figure out who murdered Brutus! Press S to stop talking to Todd Washington.
+You: Todd, where were you on Saturday night?
+Todd: Saturday? I was at home catching up on the latest Game of Thrones season. I stayed home all night.
+You: Can anyone confirm this?
+Todd: No. Brutus left the house earlier.
+You: So you weren’t at the scene of the crime?
+Todd: Definitely not. Can I go now?
+You: N
+You: Watson, what were the kinds of shoes that made the shoeprints in the snow?
+Watson: One set of sneakers, men’s size 11 and a set of Vans, men’s size 4.
+You: Todd. I notice that your feet are quite small. What size do you wear?
+Todd: Yeah, it’s a genetic thing. Probably like a 4 or a 4.5? Why?
+You: We found a set of footprints at the crime scene that seem to match your shoes. You were at the scene on Saturday! 
+Todd: O-oh! I forgot. I did go outside to uh… give Brutus his keys.
+You: N.
+You: Watson, did we find keys on the body?
+Watson: No keys were found on the body.
+You: Todd! You’re lying again. There were no keys on the body.
+Todd: Look, alright. Stop asking me questions! Obviously that other person did it. You’re wasting time here!
+Conversation end.
+
+Guess!
+Todd Washington
+As it turns out, Brutus made too much fun of Todd’s small shoe size and one day, Todd couldn’t take it anymore. How ironic that Todd’s shoe size ended up being his downfall.
