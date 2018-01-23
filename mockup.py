@@ -74,10 +74,11 @@ while(input1!='Q'):
         print("\n" * 100)
         print("The interrogation is over.")
         print("Who do you think committed the murder?")
+        print("   -Brad Vanderbilt")
+        print("   -Todd Washington")
         inputGuess = input('')
         if(inputGuess=="Todd Washington"):
             print("You are correct! Good job!")
-            input1='Q'
         if(inputGuess=="Brad Vanderbilt"):
             print("You got it wrong. You are a failure.")
-            input1='Q'
+        input1='Q'
