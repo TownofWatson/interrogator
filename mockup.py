@@ -9,7 +9,7 @@ while(input1!='Q'):
     while(input1=='N'):
         print("*************************************************************************")
         print("* Date/Time:                                                            *")
-        print("* Saturday January 13, 2018 at approximately 2:14 am                    *")
+        print("* Saturday January 13, 2018 at approximately 11:58 pm                   *")
         print("*                                                                       *")
         print("* Location:                                                             *")
         print("* 341 E 15th Avenue                                                     *")
