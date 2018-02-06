@@ -8,13 +8,20 @@ conversation = ConversationV1(
 )
 
 #response = conversation.list_workspaces()
-workspaceID = 'c76dde4b-deb6-4e10-87df-08778b85ce53'
+workspace_id = 'c76dde4b-deb6-4e10-87df-08778b85ce53'
+context = {}
+user_input = ''
 
-response = conversation.message(
-    workspace_id=workspaceID,
-    input={
-        'text': 'start'
-    }
-)
+while True:
 
-print(json.dumps(response,indent=2))
+	response = conversation.message(
+	    workspace_id=workspace_id,
+	    input={'text': user_input},
+	    context = context
+	)
+
+	context = response['context']
+
+	print(json.dumps(response['output']['text'][0],indent=2))
+
+	user_input = raw_input('>> ')
