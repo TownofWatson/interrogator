@@ -3,6 +3,7 @@ import os
 import json
 import webbrowser
 import mimetypes
+import easygui
 from watson_developer_cloud import DiscoveryV1
 import ctypes  
 
@@ -47,13 +48,15 @@ def add_doc(doc_loc, doc_name):
 	  add_doc = discovery.add_document(watson_environment_id, watson_collection, file_info=fileinfo)
 	print(json.dumps(add_doc, indent=2))
 
+'''
 def lookup():
 	qopts = {'query': '{query_string}', 'filter': 'enriched_text.entities.text:"A. J. Raffles").term(enriched_text.sentiment.document.label,count:3)', ...}
 	my_query = discovery.query(watson_environment_id, watson_collection, qopts)
 	print(json.dumps(my_query, indent=2))
+'''
 
 count = 4
-string_look = 'burglar'
+string_look = '1234 drury lane'
 def natural_language_lookup(s, count):
 	qopts = {'natural_language_query': s, 'count': count, 'passages': True}
 	my_query = discovery.query(watson_environment_id, watson_collection, qopts)
@@ -61,6 +64,7 @@ def natural_language_lookup(s, count):
 
 	output = '\n'.join([str("score: "+str(x['passage_score'])+"\ntext: "+x['passage_text']+"\n\n") for x in my_query['passages']])
 	print(output)
+	#easygui.msgbox(str(my_query), 'Watson Says')
 
 	return output + str(my_query)
 
@@ -77,8 +81,10 @@ def print_to_html(output):
 	Mbox('Watson', output, 1)
 
 
-#output = natural_language_lookup(string_look, count)
-#print_to_html(output)
+output = natural_language_lookup(string_look, count)
+#add_doc('', 'report_test_1.pdf')
+
+print_to_html(output)
 
 
 
