@@ -13,7 +13,7 @@ workspaceID = 'c76dde4b-deb6-4e10-87df-08778b85ce53'
 response = conversation.message(
     workspace_id=workspaceID,
     input={
-        'text': 'N'
+        'text': 'start'
     }
 )
 
