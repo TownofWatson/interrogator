@@ -2,6 +2,7 @@ import sys
 import os
 import json
 import webbrowser
+import mimetypes
 from watson_developer_cloud import DiscoveryV1
 import ctypes  
 
@@ -25,34 +26,32 @@ watson_collections = [x for x in collections['collections']]
 
 watson_collection = watson_collections[0]['collection_id']
 #print(watson_collection)
-'''
-delete_doc = discovery.delete_document(watson_environment_id, watson_collection, 'cb5d5f4f40535ce3fac98c49c36e1de0')
-print(json.dumps(delete_doc, indent=2))
+def delete(doc_id):
+		delete_doc = discovery.delete_document(watson_environment_id, watson_collection, doc_id)
+		print(json.dumps(delete_doc, indent=2))
+def config():
+	print(discovery.list_configurations(environment_id=watson_environment_id))
+	default_config_id = discovery.get_default_configuration_id(environment_id=watson_environment_id)
+	print(json.dumps(default_config_id, indent=2))
 
-print(discovery.list_configurations(environment_id=watson_environment_id))
-default_config_id = discovery.get_default_configuration_id(environment_id=watson_environment_id)
-print(json.dumps(default_config_id, indent=2))
+	default_config = discovery.get_configuration(environment_id=watson_environment_id, configuration_id=default_config_id)
+	print(json.dumps(default_config, indent=2))
 
-default_config = discovery.get_configuration(environment_id=watson_environment_id, configuration_id=default_config_id)
-print(json.dumps(default_config, indent=2))
+	with open(os.path.join(os.getcwd(), 'config.json')) as config_data:
+	  data = json.load(config_data)
+	  new_config = discovery.create_configuration('watson_environment_id', data)
+	print(json.dumps(new_config, indent=2))
 
+def add_doc(doc_loc, doc_name):
+	with open(os.path.join(os.getcwd(), doc_loc, doc_name), encoding='ISO-8859-1') as fileinfo:
+	  add_doc = discovery.add_document(watson_environment_id, watson_collection, file_info=fileinfo)
+	print(json.dumps(add_doc, indent=2))
 
-with open(os.path.join(os.getcwd(), 'config.json')) as config_data:
-  data = json.load(config_data)
-  new_config = discovery.create_configuration('watson_environment_id', data)
-print(json.dumps(new_config, indent=2))
+def lookup():
+	qopts = {'query': '{query_string}', 'filter': 'enriched_text.entities.text:"A. J. Raffles").term(enriched_text.sentiment.document.label,count:3)', ...}
+	my_query = discovery.query(watson_environment_id, watson_collection, qopts)
+	print(json.dumps(my_query, indent=2))
 
-'''
-'''
-with open(os.path.join(os.getcwd(), 'shortstories/', 'baskerville.pdf')) as fileinfo:
-  add_doc = discovery.add_document(watson_environment_id, watson_collection, file_info=fileinfo)
-print(json.dumps(add_doc, indent=2))
-'''
-'''
-qopts = {'query': '{query_string}', 'filter': 'enriched_text.entities.text:"A. J. Raffles").term(enriched_text.sentiment.document.label,count:3)', ...}
-my_query = discovery.query(watson_environment_id, watson_collection, qopts)
-print(json.dumps(my_query, indent=2))
-'''
 count = 4
 string_look = 'burglar'
 def natural_language_lookup(s, count):
@@ -62,6 +61,7 @@ def natural_language_lookup(s, count):
 
 	output = '\n'.join([str("score: "+str(x['passage_score'])+"\ntext: "+x['passage_text']+"\n\n") for x in my_query['passages']])
 	print(output)
+
 	return output + str(my_query)
 
 def print_to_html(output):
@@ -77,8 +77,8 @@ def print_to_html(output):
 	Mbox('Watson', output, 1)
 
 
-output = natural_language_lookup(string_look, count)
-print_to_html(output)
+#output = natural_language_lookup(string_look, count)
+#print_to_html(output)
 
 
 
