@@ -76,15 +76,20 @@ def print_to_html(output):
 	webbrowser.open('file://'+path)
 
 
-	def Mbox(title, text, style):
-	    return ctypes.cdll.user32.MessageBoxW(0, text, title, style)
-	Mbox('Watson', output, 1)
+	#def Mbox(title, text, style):
+	#    return ctypes.cdll.user32.MessageBoxW(0, text, title, style)
+	#Mbox('Watson', output, 1)
 
 
-output = natural_language_lookup(string_look, count)
+if len(sys.argv) > 1:
+	output = natural_language_lookup(sys.argv[1], count)
+	print_to_html(output)
+
+
+#output = natural_language_lookup(string_look, count)
 #add_doc('', 'report_test_1.pdf')
 
-print_to_html(output)
+#print_to_html(output)
 
 
 
