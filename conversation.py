@@ -1,5 +1,6 @@
 from watson_developer_cloud import ConversationV1
 import json
+#import tkinter
 
 conversation = ConversationV1(
 	username = 'a2f2135d-5741-4364-803b-66b8116a9b5f',
@@ -24,4 +25,4 @@ while True:
 
 	print(json.dumps(response['output']['text'][0],indent=2))
 
-	user_input = raw_input('>> ')
+	user_input = input('>> ')
