@@ -4,6 +4,8 @@ import json
 import webbrowser
 import mimetypes
 import easygui
+import nltk
+from textblob import TextBlob
 from watson_developer_cloud import DiscoveryV1
 import ctypes  
 
@@ -57,16 +59,27 @@ def lookup():
 
 count = 4
 string_look = '1234 drury lane'
+texts = []
+textblobs = []
+output_text = ''
 def natural_language_lookup(s, count):
 	qopts = {'natural_language_query': s, 'count': count, 'passages': True}
 	my_query = discovery.query(watson_environment_id, watson_collection, qopts)
 	#print(json.dumps(my_query, indent=2))
+	for x in my_query['passages']:
+
+		texts.append(x['passage_text'])
+		#print(x['passage_text'])
+		textblobs.append(TextBlob(x['passage_text']))
 
 	output = '\n'.join([str("score: "+str(x['passage_score'])+"\ntext: "+x['passage_text']+"\n\n") for x in my_query['passages']])
-	print(output)
-	#easygui.msgbox(str(my_query), 'Watson Says')
-
-	return output + str(my_query)
+	#print(output)
+	for text in textblobs:
+		for sentence in text.sentences:
+			#print(str(sentence))
+			output_text.join('\n' + str(sentence))
+	#easygui.msgbox(str(output_text), 'Watson Says')
+	return output
 
 def print_to_html(output):
 	html = '<html>' + output.replace('\n','<br>') + '</html>'
@@ -82,8 +95,14 @@ def print_to_html(output):
 
 
 if len(sys.argv) > 1:
+	question = TextBlob(str(sys.argv))
+
 	output = natural_language_lookup(sys.argv[1], count)
-	print_to_html(output)
+	if (question.words.count('who') > 0 or question.words.count('Who') > 0):
+		print('yes')
+		out_blob = TextBlob(output)
+		print(out_blob.tags)
+	#print_to_html(output)
 
 
 #output = natural_language_lookup(string_look, count)
