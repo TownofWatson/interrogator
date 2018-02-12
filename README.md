@@ -1,3 +1,3 @@
 # interrogator
 
-Run python mockup.py to run the program
+Run python mockup.py to run the test program
