@@ -9,4 +9,4 @@ install:
  
 script: 
 
-  - python conversation.py
+  - python conversation.py < input.txt
