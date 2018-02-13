@@ -15,26 +15,33 @@ import ctypes
 response_for_not_knowing = ["Couldn't tell ya, mate", "I'm not quite sure I can answer that.", 
 "Well pickle me tender, I've no clue.", "That is a really good question", "Huh",  "You know, there are some questions that even I can't answer",
 "My literature doesn't really speak of that"]
-discovery = DiscoveryV1(
-  username="adbf14e6-bc4b-4f02-a71f-e3914e61f623",
-  password="OlSYr70ryMdK",
-  version="2017-11-07"
-)
+environments = nil
+watson_environments = nil
+watson_environment_id = nil
+collections = []
+watson_collection = []
+watson_collections = []
+def init():
+	discovery = DiscoveryV1(
+	  username="adbf14e6-bc4b-4f02-a71f-e3914e61f623",
+	  password="OlSYr70ryMdK",
+	  version="2017-11-07"
+	)
 
 
-environments = discovery.get_environments()
-#print(json.dumps(environments, indent=2))
+	environments = discovery.get_environments()
+	#print(json.dumps(environments, indent=2))
 
-watson_environments = [x for x in environments['environments'] if x['name'] == 'my_environment']
-watson_environment_id = watson_environments[0]['environment_id']
-#print(json.dumps(watson_environment_id, indent=2))
+	watson_environments = [x for x in environments['environments'] if x['name'] == 'my_environment']
+	watson_environment_id = watson_environments[0]['environment_id']
+	#print(json.dumps(watson_environment_id, indent=2))
 
-collections = discovery.list_collections(watson_environment_id)
-watson_collections = [x for x in collections['collections']]
-#print(json.dumps(collections, indent=2))
+	collections = discovery.list_collections(watson_environment_id)
+	watson_collections = [x for x in collections['collections']]
+	#print(json.dumps(collections, indent=2))
 
-watson_collection = watson_collections[0]['collection_id']
-#print(watson_collection)
+	watson_collection = watson_collections[0]['collection_id']
+	#print(watson_collection)
 def delete(doc_id):
 		delete_doc = discovery.delete_document(watson_environment_id, watson_collection, doc_id)
 		print(json.dumps(delete_doc, indent=2))
@@ -131,7 +138,7 @@ def backup():
 
 question = ''
 if len(sys.argv) > 1 and sys.argv[1] !=' t':
-
+	init()
 	for x in range(1, len(sys.argv)):
 		question+=str(sys.argv[x])+' '
 
