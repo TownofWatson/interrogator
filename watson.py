@@ -1,14 +1,20 @@
 import sys
 import os
 import json
+import time
 import webbrowser
 import mimetypes
 import easygui
 import nltk
 from textblob import TextBlob
+from textblob import Word
 from watson_developer_cloud import DiscoveryV1
+import random
 import ctypes  
 
+response_for_not_knowing = ["Couldn't tell ya, mate", "I'm not quite sure I can answer that.", 
+"Well pickle me tender, I've no clue.", "That is a really good question", "Huh",  "You know, there are some questions that even I can't answer",
+"My literature doesn't really speak of that"]
 discovery = DiscoveryV1(
   username="adbf14e6-bc4b-4f02-a71f-e3914e61f623",
   password="OlSYr70ryMdK",
@@ -69,37 +75,71 @@ def natural_language_lookup(s, count):
 	for x in my_query['passages']:
 
 		texts.append(x['passage_text'])
-		#print(x['passage_text'])
 		textblobs.append(TextBlob(x['passage_text']))
 
 	output = '\n'.join([str("score: "+str(x['passage_score'])+"\ntext: "+x['passage_text']+"\n\n") for x in my_query['passages']])
-	#print(output)
 	for text in textblobs:
 		for sentence in text.sentences:
-			#print(str(sentence))
 			output_text.join('\n' + str(sentence))
 	#easygui.msgbox(str(output_text), 'Watson Says')
-	return output
+	return output, my_query
 
 def print_to_html(output):
-	html = '<html>' + output.replace('\n','<br>') + '</html>'
-	path = os.path.abspath('temp.html')
-	with open(path, 'w') as f:
-		f.write(html)
+	if (len(output) > 30):
+		html = '<html>' + output.replace('\n','<br>') + '</html>'
+		path = os.path.abspath('temp.html')
+		with open(path, 'w') as f:
+			f.write(html)
+	else:
+		path = os.path.abspath(output)
 	webbrowser.open('file://'+path)
 
+def process_who_query(output):
+	print('y')
 
 	#def Mbox(title, text, style):
 	#    return ctypes.cdll.user32.MessageBoxW(0, text, title, style)
 	#Mbox('Watson', output, 1)
 
 
-if len(sys.argv) > 1:
-	question = TextBlob(str(sys.argv))
+def backup():
+	os.system('clear')
+	print("\nWhat can I help you with, mate?\n\n")
+	text_question = input()
+	while(text_question != 'thanks'):
+		question_blob = TextBlob(text_question)
+		print('\n\n')
+		time.sleep(1)
+		if(question_blob.words.count('who')):
+			if(question_blob.words.count('killed')>0 or question_blob.words.count('murdered')>0 or question_blob.words.count('did')>0):
+				print("I believe it's you're job to find that out, mate.")
+			else:
+				print('It looks to be Bob Ross, mate.')
+		elif(question_blob.words.count('show')):
+			print('Here you go, mate.')
+			print_to_html('shortstories/report_test_1.pdf')
+		else:
+			print(response_for_not_knowing[random.randint(0, len(response_for_not_knowing))])
 
-	output = natural_language_lookup(sys.argv[1], count)
-	if (question.words.count('who') > 0 or question.words.count('Who') > 0):
-		print('yes')
+		print('\n\n')
+		text_question = input()
+
+
+
+
+
+
+question = ''
+if len(sys.argv) > 1 and sys.argv[1] !=' t':
+
+	for x in range(1, len(sys.argv)):
+		question+=str(sys.argv[x])+' '
+
+	question_blob = TextBlob(question)
+	print(str(question_blob.tokens))
+
+	output, query = natural_language_lookup(question, count)
+	if (question_blob.words.count('who') > 0 ):
 		out_blob = TextBlob(output)
 		print(out_blob.tags)
 	#print_to_html(output)
@@ -110,7 +150,8 @@ if len(sys.argv) > 1:
 
 #print_to_html(output)
 
-
+if(str(sys.argv[1]) == 't'):
+	backup()
 
 
 
