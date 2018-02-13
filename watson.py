@@ -15,32 +15,8 @@ import ctypes
 response_for_not_knowing = ["Couldn't tell ya, mate", "I'm not quite sure I can answer that.", 
 "Well pickle me tender, I've no clue.", "That is a really good question", "Huh",  "You know, there are some questions that even I can't answer",
 "My literature doesn't really speak of that"]
-environments = nil
-watson_environments = nil
-watson_environment_id = nil
-collections = []
-watson_collection = []
-watson_collections = []
-def init():
-	discovery = DiscoveryV1(
-	  username="adbf14e6-bc4b-4f02-a71f-e3914e61f623",
-	  password="OlSYr70ryMdK",
-	  version="2017-11-07"
-	)
 
 
-	environments = discovery.get_environments()
-	#print(json.dumps(environments, indent=2))
-
-	watson_environments = [x for x in environments['environments'] if x['name'] == 'my_environment']
-	watson_environment_id = watson_environments[0]['environment_id']
-	#print(json.dumps(watson_environment_id, indent=2))
-
-	collections = discovery.list_collections(watson_environment_id)
-	watson_collections = [x for x in collections['collections']]
-	#print(json.dumps(collections, indent=2))
-
-	watson_collection = watson_collections[0]['collection_id']
 	#print(watson_collection)
 def delete(doc_id):
 		delete_doc = discovery.delete_document(watson_environment_id, watson_collection, doc_id)
@@ -76,7 +52,7 @@ texts = []
 textblobs = []
 output_text = ''
 def natural_language_lookup(s, count):
-	qopts = {'natural_language_query': s, 'count': count, 'passages': True}
+	qopts = {'natural_language_query': s, 'count': count, 'passages': True, 'return': ['extracted_metadata.filename']}
 	my_query = discovery.query(watson_environment_id, watson_collection, qopts)
 	#print(json.dumps(my_query, indent=2))
 	for x in my_query['passages']:
@@ -84,15 +60,19 @@ def natural_language_lookup(s, count):
 		texts.append(x['passage_text'])
 		textblobs.append(TextBlob(x['passage_text']))
 
+
 	output = '\n'.join([str("score: "+str(x['passage_score'])+"\ntext: "+x['passage_text']+"\n\n") for x in my_query['passages']])
+	extrac = [str(x['extracted_metadata']['filename']) for x in my_query['results']]
+	#docid = '\n'.join([str("score: "+str(x['passage_score'])+"\ntext: "+x['passage_text']+"\n\n") for x in my_query['passages']])
+
 	for text in textblobs:
 		for sentence in text.sentences:
 			output_text.join('\n' + str(sentence))
 	#easygui.msgbox(str(output_text), 'Watson Says')
-	return output, my_query
+	return output, my_query, extrac
 
 def print_to_html(output):
-	if (len(output) > 30):
+	if (len(output) > 50):
 		html = '<html>' + output.replace('\n','<br>') + '</html>'
 		path = os.path.abspath('temp.html')
 		with open(path, 'w') as f:
@@ -120,6 +100,8 @@ def backup():
 		if(question_blob.words.count('who')):
 			if(question_blob.words.count('killed')>0 or question_blob.words.count('murdered')>0 or question_blob.words.count('did')>0):
 				print("I believe it's you're job to find that out, mate.")
+			elif(question_blob.words.count('Knife')):
+				print("A knife was found with Bob Ross's fingerprincs, and various acrylic paints.")
 			else:
 				print('It looks to be Bob Ross, mate.')
 		elif(question_blob.words.count('show')):
@@ -135,20 +117,46 @@ def backup():
 
 
 
-
 question = ''
-if len(sys.argv) > 1 and sys.argv[1] !=' t':
-	init()
+if len(sys.argv) > 1 and sys.argv[1] != 't':
+
+	discovery = DiscoveryV1(
+		username="adbf14e6-bc4b-4f02-a71f-e3914e61f623",
+		password="OlSYr70ryMdK",
+		version="2017-11-07"
+	)
+
+
+	environments = discovery.get_environments()
+		#print(json.dumps(environments, indent=2))
+
+	watson_environments = [x for x in environments['environments'] if x['name'] == 'my_environment']
+	watson_environment_id = watson_environments[0]['environment_id']
+		#print(json.dumps(watson_environment_id, indent=2))
+
+	collections = discovery.list_collections(watson_environment_id)
+	watson_collections = [x for x in collections['collections']]
+		#print(json.dumps(collections, indent=2))
+	for x in watson_collections:
+		if(x['name'] == 'crimereports'):
+			watson_collection = x['collection_id']
+
+
 	for x in range(1, len(sys.argv)):
 		question+=str(sys.argv[x])+' '
 
 	question_blob = TextBlob(question)
 	print(str(question_blob.tokens))
 
-	output, query = natural_language_lookup(question, count)
+	output, query, extrac = natural_language_lookup(question, count)
 	if (question_blob.words.count('who') > 0 ):
 		out_blob = TextBlob(output)
 		print(out_blob.tags)
+
+	elif(question_blob.words.count('show')):
+		print(extrac)
+		print_to_html('pdfs/gen/'+str(extrac[0]))
+
 	#print_to_html(output)
 
 
