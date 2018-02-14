@@ -1,0 +1,12 @@
+language: python
+
+python:
+
+  - "3.6"
+  
+install: 
+  - pip install --upgrade watson_developer_cloud
+ 
+script: 
+
+  - python conversation.py < input.txt
