@@ -3,6 +3,7 @@ import json
 import tkinter as tk
 import tkinter.ttk as ttk
 import tkinter.scrolledtext as scrolledtext
+import tkinter.font as font
 
 conversation = ConversationV1(
 	username = 'a2f2135d-5741-4364-803b-66b8116a9b5f',
@@ -17,6 +18,7 @@ class InterrogateWindow(tk.Tk):
 
 	def __init__(self):
 		tk.Tk.__init__(self)
+		self.textFont = font.Font(family="Helvetica",size=30)
 
 		self.title("Interrogate")		
 		self.initialize()
@@ -33,7 +35,7 @@ class InterrogateWindow(tk.Tk):
 		self.usr_input = ttk.Entry(self, state='normal')
 		self.usr_input.grid(column=0, row=1, sticky='nesw', padx=3, pady=3)
 
-		self.conversation = scrolledtext.ScrolledText(self, state='disabled')
+		self.conversation = scrolledtext.ScrolledText(self, state='disabled',font=self.textFont)
 		self.conversation.grid(column=0, row=0, columnspan=2, sticky='nesw', padx=3, pady=3)
 
 		self.start_session()
