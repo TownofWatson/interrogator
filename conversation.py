@@ -33,9 +33,10 @@ class InterrogateWindow(tk.Tk):
 		self.respond.grid(column=1, row=1, sticky='nesw', padx=3, pady=3)
 
 		self.usr_input = ttk.Entry(self, state='normal')
+		self.usr_input.bind("<Return>",(lambda event: self.get_response()))
 		self.usr_input.grid(column=0, row=1, sticky='nesw', padx=3, pady=3)
 
-		self.conversation = scrolledtext.ScrolledText(self, state='disabled',font=self.textFont)
+		self.conversation = scrolledtext.ScrolledText(self, state='disabled',font=self.textFont,wrap='word')
 		self.conversation.grid(column=0, row=0, columnspan=2, sticky='nesw', padx=3, pady=3)
 
 		self.start_session()
@@ -67,6 +68,7 @@ class InterrogateWindow(tk.Tk):
 
 		self.conversation['state'] = 'normal'
 		self.conversation.insert(tk.END, "User: " + user_input + "\n" + json.dumps(response['output']['text'][0],indent=2) + "\n\n")
+		self.conversation.see(tk.END)
 		self.conversation['state'] = 'disabled'
 
 
