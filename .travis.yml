@@ -12,4 +12,4 @@ install:
  
 script: 
   - python -m nltk.downloader all
-  - python3 watson.py bob ross
+  - python3 watson.py bob ross < input.txt
