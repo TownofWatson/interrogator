@@ -11,4 +11,4 @@ install:
 
  
 script: 
-  - python watson.py bob ross
+  - python3 watson.py bob ross
