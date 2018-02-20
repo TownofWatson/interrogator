@@ -131,9 +131,9 @@ def watson_opinion(question_blob, extrac):
 
 
 
-question = ''
-if len(sys.argv) > 1 and sys.argv[1] != 't':
 
+
+def main_watson(question):
 	discovery = DiscoveryV1(
 		username="adbf14e6-bc4b-4f02-a71f-e3914e61f623",
 		password="OlSYr70ryMdK",
@@ -157,8 +157,6 @@ if len(sys.argv) > 1 and sys.argv[1] != 't':
 			watson_collection = x['collection_id']
 
 
-	for x in range(1, len(sys.argv)):
-		question+=str(sys.argv[x])+' '
 
 	question_blob = TextBlob(question)
 	#print(str(question_blob.tokens))
@@ -198,6 +196,12 @@ if len(sys.argv) > 1 and sys.argv[1] != 't':
 #add_doc('', 'report_test_1.pdf')
 
 #print_to_html(output)
+
+question = ''
+if len(sys.argv) > 1 and sys.argv[1] != 't':
+	for x in range(1, len(sys.argv)):
+	question+=str(sys.argv[x])+' '
+	main_watson(question)
 
 if(str(sys.argv[1]) == 't'):
 	print("t")
