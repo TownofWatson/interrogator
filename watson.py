@@ -96,12 +96,12 @@ def backup():
 	while(text_question != 'thanks'):
 		question_blob = TextBlob(text_question)
 		print('\n\n')
-		time.sleep(1)
+		time.sleep(3)
 		if(question_blob.words.count('who')):
 			if(question_blob.words.count('killed')>0 or question_blob.words.count('murdered')>0 or question_blob.words.count('did')>0):
-				print("I believe it's you're job to find that out, mate.")
+				print("I believe it's your job to find that out, mate.")
 			elif(question_blob.words.count('Knife')):
-				print("A knife was found with Bob Ross's fingerprincs, and various acrylic paints.")
+				print("A knife was found with Bob Ross's fingerprints, and various acrylic paints, mate.")
 			else:
 				print('It looks to be Bob Ross, mate.')
 		elif(question_blob.words.count('show')):
@@ -114,6 +114,20 @@ def backup():
 		text_question = input()
 
 
+def watson_opinion(question_blob, extrac):
+	name = "default"
+	if(question_blob.words.count('show')):
+		print(extrac)
+		print_to_html('pdfs/gen/'+str(extrac[0]))
+	elif(question_blob.words.count('who')):
+		if(question_blob.words.count('killed')>0 or question_blob.words.count('murdered')>0 or question_blob.words.count('did')>0):
+			print("I believe it's your job to find that out, mate.")
+		elif(question_blob.words.count('Knife')):
+			print("A knife was found with " + name + "'s fingerprints")
+		else:
+			print('It looks to be '+name+', mate.')
+	else:
+			print(response_for_not_knowing[random.randint(0, len(response_for_not_knowing))])
 
 
 
@@ -137,6 +151,7 @@ if len(sys.argv) > 1 and sys.argv[1] != 't':
 	collections = discovery.list_collections(watson_environment_id)
 	watson_collections = [x for x in collections['collections']]
 		#print(json.dumps(collections, indent=2))
+
 	for x in watson_collections:
 		if(x['name'] == 'crimereports'):
 			watson_collection = x['collection_id']
@@ -146,16 +161,35 @@ if len(sys.argv) > 1 and sys.argv[1] != 't':
 		question+=str(sys.argv[x])+' '
 
 	question_blob = TextBlob(question)
-	print(str(question_blob.tokens))
+	#print(str(question_blob.tokens))
 
 	output, query, extrac = natural_language_lookup(question, count)
-	if (question_blob.words.count('who') > 0 ):
-		out_blob = TextBlob(output)
-		print(out_blob.tags)
+	name = "default"
+	if(len(extrac) > 0):
+		print("I've found some relevant documents for ya \n")
+		for file_num in range(0, len(extrac)):
+			print(str(file_num) + ". " + extrac[file_num])
 
-	elif(question_blob.words.count('show')):
-		print(extrac)
-		print_to_html('pdfs/gen/'+str(extrac[0]))
+		print(str(len(extrac)) + " None of these")
+		print("\n" + str(len(extrac)+1) + " Or do you want me to look through them and give my opinion?")
+		response = input()
+		while(len(response) != 1):
+			print("I only understand numbers, beep boop")
+			response = input()
+		response = int(response)
+		if((response) == len(extrac)+1):
+			watson_opinion(question_blob, extrac)
+		elif((response) == len(extrac)):
+			print("Sorry mate, I just can't find anything relevant")
+		elif(response > len(extrac)):
+			print("OOB")
+		else:
+			print_to_html('pdfs/gen/'+str(extrac[response]))
+	else:
+		print("I've got nothin for ya")
+
+
+
 
 	#print_to_html(output)
 
@@ -166,6 +200,7 @@ if len(sys.argv) > 1 and sys.argv[1] != 't':
 #print_to_html(output)
 
 if(str(sys.argv[1]) == 't'):
+	print("t")
 	backup()
 
 
