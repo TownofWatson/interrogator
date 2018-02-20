@@ -4,7 +4,7 @@ import json
 import time
 import webbrowser
 import mimetypes
-import easygui
+#import easygui
 import nltk
 from textblob import TextBlob
 from textblob import Word
