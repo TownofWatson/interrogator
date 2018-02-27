@@ -21,6 +21,7 @@ response_for_not_knowing = ["Couldn't tell ya, mate", "I'm not quite sure I can 
 def delete(doc_id):
 		delete_doc = discovery.delete_document(watson_environment_id, watson_collection, doc_id)
 		print(json.dumps(delete_doc, indent=2))
+		return "deleted"
 def config():
 	print(discovery.list_configurations(environment_id=watson_environment_id))
 	default_config_id = discovery.get_default_configuration_id(environment_id=watson_environment_id)
@@ -38,6 +39,7 @@ def add_doc(doc_loc, doc_name):
 	with open(os.path.join(os.getcwd(), doc_loc, doc_name), encoding='ISO-8859-1') as fileinfo:
 	  add_doc = discovery.add_document(watson_environment_id, watson_collection, file_info=fileinfo)
 	print(json.dumps(add_doc, indent=2))
+	return "added"
 
 '''
 def lookup():
@@ -80,9 +82,10 @@ def print_to_html(output):
 	else:
 		path = os.path.abspath(output)
 	webbrowser.open('file://'+path)
+	return True
 
 def process_who_query(output):
-	print('y')
+	return True
 
 	#def Mbox(title, text, style):
 	#    return ctypes.cdll.user32.MessageBoxW(0, text, title, style)
@@ -133,38 +136,43 @@ def watson_opinion(question_blob, extrac):
 
 question = ''
 if len(sys.argv) > 1 and sys.argv[1] != 't':
-
-	discovery = DiscoveryV1(
-		username="adbf14e6-bc4b-4f02-a71f-e3914e61f623",
-		password="OlSYr70ryMdK",
-		version="2017-11-07"
-	)
-
-
-	environments = discovery.get_environments()
-		#print(json.dumps(environments, indent=2))
-
-	watson_environments = [x for x in environments['environments'] if x['name'] == 'my_environment']
-	watson_environment_id = watson_environments[0]['environment_id']
-		#print(json.dumps(watson_environment_id, indent=2))
-
-	collections = discovery.list_collections(watson_environment_id)
-	watson_collections = [x for x in collections['collections']]
-		#print(json.dumps(collections, indent=2))
-
-	for x in watson_collections:
-		if(x['name'] == 'crimereports'):
-			watson_collection = x['collection_id']
-
-
 	for x in range(1, len(sys.argv)):
 		question+=str(sys.argv[x])+' '
+
+
+def main_run(question):
+	# discovery = DiscoveryV1(
+	# 	username="adbf14e6-bc4b-4f02-a71f-e3914e61f623",
+	# 	password="OlSYr70ryMdK",
+	# 	version="2017-11-07"
+	# )
+
+
+	# environments = discovery.get_environments()
+	# 	#print(json.dumps(environments, indent=2))
+
+	# watson_environments = [x for x in environments['environments'] if x['name'] == 'my_environment']
+	# watson_environment_id = watson_environments[0]['environment_id']
+	# 	#print(json.dumps(watson_environment_id, indent=2))
+
+	# collections = discovery.list_collections(watson_environment_id)
+	# watson_collections = [x for x in collections['collections']]
+		#print(json.dumps(collections, indent=2))
+
+	# for x in watson_collections:
+	# 	if(x['name'] == 'crimereports'):
+	# 		watson_collection = x['collection_id']
+
+
+	#for x in range(1, len(sys.argv)):
+	#	question+=str(sys.argv[x])+' '
 
 	question_blob = TextBlob(question)
 	#print(str(question_blob.tokens))
 
 	output, query, extrac = natural_language_lookup(question, count)
 	name = "default"
+	result = ''
 	if(len(extrac) > 0):
 		print("I've found some relevant documents for ya \n")
 		for file_num in range(0, len(extrac)):
@@ -199,12 +207,31 @@ if len(sys.argv) > 1 and sys.argv[1] != 't':
 
 #print_to_html(output)
 
-if(str(sys.argv[1]) == 't'):
-	print("t")
-	backup()
+if(len(sys.argv) > 1) and (str(sys.argv[1]) == 't'):
+		backup()
+else:
+	discovery = DiscoveryV1(
+		username="adbf14e6-bc4b-4f02-a71f-e3914e61f623",
+		password="OlSYr70ryMdK",
+		version="2017-11-07"
+	)
 
 
+	environments = discovery.get_environments()
+		#print(json.dumps(environments, indent=2))
 
+	watson_environments = [x for x in environments['environments'] if x['name'] == 'my_environment']
+	watson_environment_id = watson_environments[0]['environment_id']
+		#print(json.dumps(watson_environment_id, indent=2))
+
+	collections = discovery.list_collections(watson_environment_id)
+	watson_collections = [x for x in collections['collections']]
+
+	for x in watson_collections:
+		if(x['name'] == 'crimereports'):
+			watson_collection = x['collection_id']
+if(len(question) > 1):
+	main_run(question)
 
 
 
