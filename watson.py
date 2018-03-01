@@ -221,8 +221,11 @@ output_text = ''
 question = ''
 
 if(len(sys.argv) > 1) and (str(sys.argv[1]) == 't'):
-		backup()
-else:
+
+	backup()
+	
+elif(len(sys.argv) > 1):
+
 	for x in range(1, len(sys.argv)):
 		question+=str(sys.argv[x])+' '
 
