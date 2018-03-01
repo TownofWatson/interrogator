@@ -48,12 +48,7 @@ def lookup():
 	print(json.dumps(my_query, indent=2))
 '''
 
-count = 4
-string_look = '1234 drury lane'
-texts = []
-textblobs = []
-output_text = ''
-def natural_language_lookup(s, count):
+def natural_language_lookup(s, count, discovery, watson_environment_id, watson_collection):
 	qopts = {'natural_language_query': s, 'count': count, 'passages': True, 'return': ['extracted_metadata.filename']}
 	my_query = discovery.query(watson_environment_id, watson_collection, qopts)
 	#print(json.dumps(my_query, indent=2))
@@ -134,82 +129,7 @@ def watson_opinion(question_blob, extrac):
 
 
 
-question = ''
-if len(sys.argv) > 1 and sys.argv[1] != 't':
-	for x in range(1, len(sys.argv)):
-		question+=str(sys.argv[x])+' '
-
-
-def main_run(question):
-	# discovery = DiscoveryV1(
-	# 	username="adbf14e6-bc4b-4f02-a71f-e3914e61f623",
-	# 	password="OlSYr70ryMdK",
-	# 	version="2017-11-07"
-	# )
-
-
-	# environments = discovery.get_environments()
-	# 	#print(json.dumps(environments, indent=2))
-
-	# watson_environments = [x for x in environments['environments'] if x['name'] == 'my_environment']
-	# watson_environment_id = watson_environments[0]['environment_id']
-	# 	#print(json.dumps(watson_environment_id, indent=2))
-
-	# collections = discovery.list_collections(watson_environment_id)
-	# watson_collections = [x for x in collections['collections']]
-		#print(json.dumps(collections, indent=2))
-
-	# for x in watson_collections:
-	# 	if(x['name'] == 'crimereports'):
-	# 		watson_collection = x['collection_id']
-
-
-	#for x in range(1, len(sys.argv)):
-	#	question+=str(sys.argv[x])+' '
-
-	question_blob = TextBlob(question)
-	#print(str(question_blob.tokens))
-
-	output, query, extrac = natural_language_lookup(question, count)
-	name = "default"
-	result = ''
-	if(len(extrac) > 0):
-		print("I've found some relevant documents for ya \n")
-		for file_num in range(0, len(extrac)):
-			print(str(file_num) + ". " + extrac[file_num])
-
-		print(str(len(extrac)) + " None of these")
-		print("\n" + str(len(extrac)+1) + " Or do you want me to look through them and give my opinion?")
-		response = input()
-		while(len(response) != 1):
-			print("I only understand numbers, beep boop")
-			response = input()
-		response = int(response)
-		if((response) == len(extrac)+1):
-			watson_opinion(question_blob, extrac)
-		elif((response) == len(extrac)):
-			print("Sorry mate, I just can't find anything relevant")
-		elif(response > len(extrac)):
-			print("OOB")
-		else:
-			print_to_html('pdfs/gen/'+str(extrac[response]))
-	else:
-		print("I've got nothin for ya")
-
-
-
-
-	#print_to_html(output)
-
-
-#output = natural_language_lookup(string_look, count)
-#add_doc('', 'report_test_1.pdf')
-
-#print_to_html(output)
-
-if(len(sys.argv) > 1) and (str(sys.argv[1]) == 't'):
-		backup()
-else:
+def connect():
 	discovery = DiscoveryV1(
 		username="adbf14e6-bc4b-4f02-a71f-e3914e61f623",
 		password="OlSYr70ryMdK",
@@ -230,6 +150,82 @@ else:
 	for x in watson_collections:
 		if(x['name'] == 'crimereports'):
 			watson_collection = x['collection_id']
+
+	return discovery, environments, watson_environments, watson_environment_id, collections, watson_collections, watson_collection
+
+
+def main_run(question):
+	discovery, environments, watson_environments, watson_environment_id, collections, watson_collections, watson_collection = connect()
+
+	question_blob = TextBlob(question)
+	#print(str(question_blob.tokens))
+
+	output, query, extrac = natural_language_lookup(question, count, discovery, watson_environment_id, watson_collection)
+	name = "default"
+	result = ''
+	if(len(extrac) > 0):
+		print("I've found some relevant documents for ya \n")
+		list_options(extrac)
+
+		response = input()
+
+		while(len(response) != 1):
+			print("I only understand numbers, beep boop")
+			response = input()
+
+		response = int(response)
+
+		handle_response(response, extrac, question_blob)
+	else:
+		print("I've got nothin for ya")
+
+def list_options(extrac):
+
+	for file_num in range(0, len(extrac)):
+		print(str(file_num) + ". " + extrac[file_num])
+
+	print(str(len(extrac)) + " None of these")
+	print("\n" + str(len(extrac)+1) + " Or do you want me to look through them and give my opinion?")
+
+def handle_list_response(reponse, extrac, question_blob):
+
+	if((response) == len(extrac)+1):
+
+		watson_opinion(question_blob, extrac)
+
+	elif((response) == len(extrac)):
+
+		print("Sorry mate, I just can't find anything relevant")
+
+	elif(response > len(extrac)):
+
+		print("OOB")
+
+	else:
+
+		print_to_html('pdfs/gen/'+str(extrac[response]))
+
+
+	#print_to_html(output)
+
+
+#output = natural_language_lookup(string_look, count)
+#add_doc('', 'report_test_1.pdf')
+
+#print_to_html(output)
+count = 4
+string_look = '1234 drury lane'
+texts = []
+textblobs = []
+output_text = ''
+question = ''
+
+if(len(sys.argv) > 1) and (str(sys.argv[1]) == 't'):
+		backup()
+else:
+	for x in range(1, len(sys.argv)):
+		question+=str(sys.argv[x])+' '
+
 if(len(question) > 1):
 	main_run(question)
 
