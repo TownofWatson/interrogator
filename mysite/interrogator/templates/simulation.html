@@ -1,0 +1,37 @@
+{% extends "header.html" %}
+
+{% block content %}
+
+<div class="container-fluid">
+	<h1>Simulation</h1>
+	<p>Figure out who the suspects are through observation, wit, and tact!</p>
+	<div class="row">
+		<div class="col-sm-6">
+			Interrogation Room
+			<div class="form-group">
+				<textarea class="form-control" rows="10" cols="60" id="respond"></textarea>
+			</div> 
+			<div class="form-group">
+				<textarea class="form-control" rows="2" cols="60" id="respond" onkeypress="get_response()"></textarea>
+			</div> 
+		</div>
+
+	    <div class="col-sm-6">
+	    	Watson/Case Files/Notes
+	    	<div class="row" style="background-color:lavender;">c2r1</div>
+	    </div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	function get_response() {
+		$.ajax({
+		  type: "POST",
+		  url: "~/conversation.py"
+		}).done(function( o ) {
+		   // do something
+		});
+	}
+</script>
+
+{% endblock %}
