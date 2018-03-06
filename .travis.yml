@@ -11,6 +11,9 @@ install:
 
  
 script: 
+  - python conversation.py < input.txt
   - python -m nltk.downloader all
   - python3 watson.py 
   - python3 test.py
+
+ 
