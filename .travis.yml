@@ -1,0 +1,16 @@
+language: python
+
+python:
+
+  - "3.6"
+  
+install: 
+  - pip install -I watson-developer-cloud==0.26.1
+  - pip install -U textblob
+  - pip install -U nltk
+
+ 
+script: 
+  - python -m nltk.downloader all
+  - python3 watson.py 
+  - python3 test.py
