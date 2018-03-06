@@ -57,8 +57,8 @@ def natural_language_lookup(s, count, discovery, watson_environment_id, watson_c
 	#	texts.append(x['passage_text'])
 	#	textblobs.append(TextBlob(x['passage_text']))
 
-
-	output = '\n'.join([str("score: "+str(x['passage_score'])+"\ntext: "+x['passage_text']+"\n\n") for x in my_query['passages']])
+	print(my_query)
+	output = "response"#'\n'.join([str("score: "+str(x['passage_score'])+"\ntext: "+x['passage_text']+"\n\n") for x in my_query['passages']])
 	extrac = [str(x['extracted_metadata']['filename']) for x in my_query['results']]
 	#docid = '\n'.join([str("score: "+str(x['passage_score'])+"\ntext: "+x['passage_text']+"\n\n") for x in my_query['passages']])
 
@@ -137,10 +137,14 @@ def connect():
 	)
 
 
+	#environments = discovery.list_environments()
 	environments = discovery.get_environments()
+
+	#print(environments)
 		#print(json.dumps(environments, indent=2))
 
 	watson_environments = [x for x in environments['environments'] if x['name'] == 'my_environment']
+	#print(watson_environments)
 	watson_environment_id = watson_environments[0]['environment_id']
 		#print(json.dumps(watson_environment_id, indent=2))
 

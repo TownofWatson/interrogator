@@ -45,8 +45,8 @@ class InterrogateWindow(tk.Tk):
 		user_input = ''
 		response = conversation.message(
 			workspace_id=workspace_id,
-			input={'text': user_input},
-			context = self.context
+			message_input={'text': user_input},
+			context = self.context,	
 		)
 		self.context = response['context']
 		self.conversation['state'] = 'normal'
@@ -60,7 +60,7 @@ class InterrogateWindow(tk.Tk):
 
 		response = conversation.message(
 			workspace_id=workspace_id,
-			input={'text': user_input},
+			message_input={'text': user_input},
 			context = self.context
 		)
 
