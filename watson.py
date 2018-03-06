@@ -5,9 +5,9 @@ import time
 import webbrowser
 import mimetypes
 #import easygui
-import nltk
-from textblob import TextBlob
-from textblob import Word
+#import nltk
+#from textblob import TextBlob
+#from textblob import Word
 from watson_developer_cloud import DiscoveryV1
 import random
 import ctypes  
@@ -52,19 +52,19 @@ def natural_language_lookup(s, count, discovery, watson_environment_id, watson_c
 	qopts = {'natural_language_query': s, 'count': count, 'passages': True, 'return': ['extracted_metadata.filename']}
 	my_query = discovery.query(watson_environment_id, watson_collection, qopts)
 	#print(json.dumps(my_query, indent=2))
-	for x in my_query['passages']:
+	#for x in my_query['passages']:
 
-		texts.append(x['passage_text'])
-		textblobs.append(TextBlob(x['passage_text']))
+	#	texts.append(x['passage_text'])
+	#	textblobs.append(TextBlob(x['passage_text']))
 
 
 	output = '\n'.join([str("score: "+str(x['passage_score'])+"\ntext: "+x['passage_text']+"\n\n") for x in my_query['passages']])
 	extrac = [str(x['extracted_metadata']['filename']) for x in my_query['results']]
 	#docid = '\n'.join([str("score: "+str(x['passage_score'])+"\ntext: "+x['passage_text']+"\n\n") for x in my_query['passages']])
 
-	for text in textblobs:
-		for sentence in text.sentences:
-			output_text.join('\n' + str(sentence))
+	# for text in textblobs:
+	# 	for sentence in text.sentences:
+	# 		output_text.join('\n' + str(sentence))
 	#easygui.msgbox(str(output_text), 'Watson Says')
 	return output, my_query, extrac
 
@@ -90,42 +90,42 @@ def process_who_query(output):
 def backup():
 	os.system('clear')
 	print("\nWhat can I help you with, mate?\n\n")
-	text_question = input()
-	while(text_question != 'thanks'):
-		question_blob = TextBlob(text_question)
-		print('\n\n')
-		time.sleep(3)
-		if(question_blob.words.count('who')):
-			if(question_blob.words.count('killed')>0 or question_blob.words.count('murdered')>0 or question_blob.words.count('did')>0):
-				print("I believe it's your job to find that out, mate.")
-			elif(question_blob.words.count('Knife')):
-				print("A knife was found with Bob Ross's fingerprints, and various acrylic paints, mate.")
-			else:
-				print('It looks to be Bob Ross, mate.')
-		elif(question_blob.words.count('show')):
-			print('Here you go, mate.')
-			print_to_html('shortstories/report_test_1.pdf')
-		else:
-			print(response_for_not_knowing[random.randint(0, len(response_for_not_knowing))])
+	# text_question = input()
+	# while(text_question != 'thanks'):
+	# 	question_blob = TextBlob(text_question)
+	# 	print('\n\n')
+	# 	time.sleep(3)
+	# 	if(question_blob.words.count('who')):
+	# 		if(question_blob.words.count('killed')>0 or question_blob.words.count('murdered')>0 or question_blob.words.count('did')>0):
+	# 			print("I believe it's your job to find that out, mate.")
+	# 		elif(question_blob.words.count('Knife')):
+	# 			print("A knife was found with Bob Ross's fingerprints, and various acrylic paints, mate.")
+	# 		else:
+	# 			print('It looks to be Bob Ross, mate.')
+	# 	elif(question_blob.words.count('show')):
+	# 		print('Here you go, mate.')
+	# 		print_to_html('shortstories/report_test_1.pdf')
+	# 	else:
+	# 		print(response_for_not_knowing[random.randint(0, len(response_for_not_knowing))])
 
-		print('\n\n')
-		text_question = input()
+	# 	print('\n\n')
+	# 	text_question = input()
 
 
 def watson_opinion(question_blob, extrac):
 	name = "default"
-	if(question_blob.words.count('show')):
-		print(extrac)
-		print_to_html('pdfs/gen/'+str(extrac[0]))
-	elif(question_blob.words.count('who')):
-		if(question_blob.words.count('killed')>0 or question_blob.words.count('murdered')>0 or question_blob.words.count('did')>0):
-			print("I believe it's your job to find that out, mate.")
-		elif(question_blob.words.count('Knife')):
-			print("A knife was found with " + name + "'s fingerprints")
-		else:
-			print('It looks to be '+name+', mate.')
-	else:
-			print(response_for_not_knowing[random.randint(0, len(response_for_not_knowing))])
+	# if(question_blob.words.count('show')):
+	# 	print(extrac)
+	# 	print_to_html('pdfs/gen/'+str(extrac[0]))
+	# elif(question_blob.words.count('who')):
+	# 	if(question_blob.words.count('killed')>0 or question_blob.words.count('murdered')>0 or question_blob.words.count('did')>0):
+	# 		print("I believe it's your job to find that out, mate.")
+	# 	elif(question_blob.words.count('Knife')):
+	# 		print("A knife was found with " + name + "'s fingerprints")
+	# 	else:
+	# 		print('It looks to be '+name+', mate.')
+	# else:
+	# 		print(response_for_not_knowing[random.randint(0, len(response_for_not_knowing))])
 
 
 
@@ -157,25 +157,27 @@ def connect():
 def main_run(question):
 	discovery, environments, watson_environments, watson_environment_id, collections, watson_collections, watson_collection = connect()
 
-	question_blob = TextBlob(question)
+	question_blob = '-' #TextBlob(question)
 	#print(str(question_blob.tokens))
 
 	output, query, extrac = natural_language_lookup(question, count, discovery, watson_environment_id, watson_collection)
 	name = "default"
-	result = ''
+	response = 999999999
 	if(len(extrac) > 0):
 		print("I've found some relevant documents for ya \n")
-		list_options(extrac)
+		while(response != (len(extrac)+1)):
+			list_options(extrac)
 
-		response = input()
-
-		while(len(response) != 1):
-			print("I only understand numbers, beep boop")
 			response = input()
 
-		response = int(response)
+			while(len(response) != 1):
+				print("I only understand numbers, beep boop")
+				response = input()
 
-		handle_response(response, extrac, question_blob)
+			response = int(response)
+
+			handle_list_response(response, extrac, question_blob)
+
 	else:
 		print("I've got nothin for ya")
 
@@ -185,26 +187,27 @@ def list_options(extrac):
 		print(str(file_num) + ". " + extrac[file_num])
 
 	print(str(len(extrac)) + " None of these")
-	print("\n" + str(len(extrac)+1) + " Or do you want me to look through them and give my opinion?")
+	print(str(len(extrac)+1) + " Done.")
+	#print("\n" + str(len(extrac)+1) + " Or do you want me to look through them and give my opinion?")
 
-def handle_list_response(reponse, extrac, question_blob):
-
+def handle_list_response(response, extrac, question_blob):
+	text_response = "Hmm\n\n"
 	if((response) == len(extrac)+1):
-
-		watson_opinion(question_blob, extrac)
+		text_response = "Hope I helped.\n\n"
+		#watson_opinion(question_blob, extrac)
 
 	elif((response) == len(extrac)):
 
-		print("Sorry mate, I just can't find anything relevant")
+		text_response = "Sorry mate, I just can't find anything relevant\n\n"
 
 	elif(response > len(extrac)):
 
-		print("OOB")
+		text_response = "OOB\n\n"
 
 	else:
-
+		text_response = "Here ya go mate\n\n"
 		print_to_html('pdfs/gen/'+str(extrac[response]))
-
+	print(text_response)
 
 	#print_to_html(output)
 
