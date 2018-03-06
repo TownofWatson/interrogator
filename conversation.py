@@ -1,9 +1,11 @@
 from watson_developer_cloud import ConversationV1
 import json
+import watson
 import tkinter as tk
 import tkinter.ttk as ttk
 import tkinter.scrolledtext as scrolledtext
 import tkinter.font as font
+
 
 conversation = ConversationV1(
 	username = 'a2f2135d-5741-4364-803b-66b8116a9b5f',
@@ -17,6 +19,9 @@ workspace_id = 'c76dde4b-deb6-4e10-87df-08778b85ce53'
 class InterrogateWindow(tk.Tk):
 
 	def __init__(self):
+		self.watson_state = 0
+		self.extrac = ""
+
 		tk.Tk.__init__(self)
 		self.textFont = font.Font(family="Helvetica",size=30)
 
@@ -27,6 +32,7 @@ class InterrogateWindow(tk.Tk):
 		self.context = {}
 		self.grid()
 		self.columnconfigure(0,weight=1)
+		self.columnconfigure(2,weight=1)
 		self.rowconfigure(0,weight=1)
 
 		self.respond = ttk.Button(self, text='Respond', command=self.get_response)
@@ -38,6 +44,19 @@ class InterrogateWindow(tk.Tk):
 
 		self.conversation = scrolledtext.ScrolledText(self, state='disabled',font=self.textFont,wrap='word')
 		self.conversation.grid(column=0, row=0, columnspan=2, sticky='nesw', padx=3, pady=3)
+
+
+		#Discovery
+
+		self.watson_ask = ttk.Button(self, text='Ask Watson', command=self.get_response_watson)
+		self.watson_ask.grid(column=3, row=1, sticky='nesw', padx=3, pady=3)
+
+		self.usr_input_watson = ttk.Entry(self, state='normal')
+		self.usr_input_watson.bind("<Return>",(lambda event: self.get_response_watson()))
+		self.usr_input_watson.grid(column=2, row=1, sticky='nesw', padx=3, pady=3)
+
+		self.watson = scrolledtext.ScrolledText(self, state='disabled',font=self.textFont,wrap='word')
+		self.watson.grid(column=2, row=0, columnspan=2, sticky='nesw', padx=3, pady=3)
 
 		self.start_session()
 
@@ -52,6 +71,10 @@ class InterrogateWindow(tk.Tk):
 		self.conversation['state'] = 'normal'
 		self.conversation.insert(tk.END, json.dumps(response['output']['text'][0],indent=2) + "\n\n")
 		self.conversation['state'] = 'disabled'
+
+		self.watson['state'] = 'normal'
+		self.watson.insert(tk.END, "Hello I'm Watson!\n\n")
+		self.watson['state'] = 'disabled'
 
 
 	def get_response(self):
@@ -70,6 +93,24 @@ class InterrogateWindow(tk.Tk):
 		self.conversation.insert(tk.END, "User: " + user_input + "\n" + json.dumps(response['output']['text'][0],indent=2) + "\n\n")
 		self.conversation.see(tk.END)
 		self.conversation['state'] = 'disabled'
+
+	def get_response_watson(self):
+		user_input = self.usr_input_watson.get()
+		self.usr_input_watson.delete(0, tk.END)
+		if(self.watson_state ==0):
+			response, self.extrac = watson.ask_watson(user_input)
+			self.watson['state'] = 'normal'
+			self.watson.insert(tk.END, response)
+			self.watson['state'] = 'disabled'
+			self.watson_state = 1
+		elif(self.watson_state ==1):
+			success, response = watson.ask_watson_response(user_input, self.extrac)
+			if(success != 0):
+				self.watson_state = 0
+			self.watson['state'] = 'normal'
+			self.watson.insert(tk.END, response)
+			self.watson['state'] = 'disabled'
+
 
 
 
