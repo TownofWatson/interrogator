@@ -9,12 +9,10 @@
 		<div class="col-sm-6">
 			Interrogation Room
 			<div class="form-group">
-				<textarea class="form-control" rows="10" cols="60" id="respond">
-					{{response}}
-				</textarea>
+				<textarea class="form-control" rows="15" cols="60" id="respond">{{response}}</textarea>
 			</div> 
 			<div class="form-group">
-				<textarea class="form-control" rows="2" cols="60" id="respond"></textarea>
+				<textarea class="form-control" rows="2" cols="60" id="respond" onkeypress="get_response()"></textarea>
 			</div> 
 		</div>
 
@@ -29,8 +27,9 @@
 	function get_response() {
 		$.ajax({
 		  type: "POST",
-		  url: "../../../conversation.py"
-		}).done(function( o ) {
+		  url: "/simulation/conversation"
+		  data: {'response': resp}
+		}).done(function( resp ) {
 		   // do something
 		});
 	}
