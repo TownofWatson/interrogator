@@ -34,29 +34,33 @@ class InterrogateWindow(tk.Tk):
 		self.columnconfigure(0,weight=1)
 		self.columnconfigure(2,weight=1)
 		self.rowconfigure(0,weight=1)
+		self.rowconfigure(4,weight=1)
 
 		self.respond = ttk.Button(self, text='Respond', command=self.get_response)
-		self.respond.grid(column=1, row=1, sticky='nesw', padx=3, pady=3)
+		self.respond.grid(column=1, row=5, sticky='nesw', padx=3, pady=3)
 
 		self.usr_input = ttk.Entry(self, state='normal')
 		self.usr_input.bind("<Return>",(lambda event: self.get_response()))
-		self.usr_input.grid(column=0, row=1, sticky='nesw', padx=3, pady=3)
+		self.usr_input.grid(column=0, row=5, sticky='nesw', padx=3, pady=3)
 
 		self.conversation = scrolledtext.ScrolledText(self, state='disabled',font=self.textFont,wrap='word')
-		self.conversation.grid(column=0, row=0, columnspan=2, sticky='nesw', padx=3, pady=3)
+		self.conversation.grid(column=0, row=0, rowspan=5,columnspan=2, sticky='nesw', padx=3, pady=3)
 
 
 		#Discovery
 
 		self.watson_ask = ttk.Button(self, text='Ask Watson', command=self.get_response_watson)
-		self.watson_ask.grid(column=3, row=1, sticky='nesw', padx=3, pady=3)
+		self.watson_ask.grid(column=3, row=3, sticky='nesw', padx=3, pady=3)
 
 		self.usr_input_watson = ttk.Entry(self, state='normal')
 		self.usr_input_watson.bind("<Return>",(lambda event: self.get_response_watson()))
-		self.usr_input_watson.grid(column=2, row=1, sticky='nesw', padx=3, pady=3)
+		self.usr_input_watson.grid(column=2, row=3, sticky='nesw', padx=3, pady=3)
 
 		self.watson = scrolledtext.ScrolledText(self, state='disabled',font=self.textFont,wrap='word')
-		self.watson.grid(column=2, row=0, columnspan=2, sticky='nesw', padx=3, pady=3)
+		self.watson.grid(column=2, row=0, rowspan=3, columnspan=2, sticky='nesw', padx=3, pady=3)
+
+		self.notepad = scrolledtext.ScrolledText(self, font=self.textFont,wrap='word')
+		self.notepad.grid(column=2,row=4, rowspan=2, columnspan=2, sticky='nesw', padx=3, pady=3)
 
 		self.start_session()
 
