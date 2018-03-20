@@ -50,6 +50,7 @@
 			  url: "converse/",
 			  data: {'user_input': $("#user_input").val()}
 			}).done(function( resp ) {
+			   $("#chatbox").val($("#chatbox").val() + '\n\n' + $("#user_input").val());
 			   $("#chatbox").val($("#chatbox").val() + '\n\n' + resp);
 			   $("#user_input").val('');
 			});
@@ -64,6 +65,7 @@
 			  url: "watson/",
 			  data: {'user_input': $("#watson_input").val()}
 			}).done(function( resp ) {
+			   $("#chatbox").val($("#chatbox").val() + '\n\n' + $("#watson_input").val());
 			   $("#watsonbox").val($("#watsonbox").val() + '\n\n' + resp);
 			   $("#watson_input").val('');
 			});
