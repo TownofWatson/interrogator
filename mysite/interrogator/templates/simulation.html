@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+
+<html lang-"en">
+
+<head>
+	<title>Interrogator</title>
+	<meta clearset="utf-8" />
+	{% load staticfiles %}
+	<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" type="text/css"/>
+	<script src="{% static 'js/bootstrap.min.js' %}"></script> 
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+
+<div class="container-fluid">
+	<h1>Simulation</h1>
+	<p>Figure out who the suspects are through observation, wit, and tact!</p>
+	<div class="row">
+		<div class="col-sm-6">
+			Interrogation Room
+			<div class="form-group">
+				<textarea class="form-control" rows="15" cols="60" id="chatbox">{{response}}</textarea>
+			</div> 
+			<div class="form-group">
+				<textarea class="form-control" rows="2" cols="60" id="user_input"></textarea>
+			</div>
+		</div>
+
+	    <div class="col-sm-6">
+	    	Watson/Case Files/Notes
+	    	<div class="form-group">
+				<textarea class="form-control" rows="10" cols="60" id="watsonbox">Hello, I'm Watson!</textarea>
+			</div> 
+			<div class="form-group">
+				<textarea class="form-control" rows="1" cols="60" id="watson_input"></textarea>
+			</div>
+			<div class="form-group">
+				<textarea class="form-control" rows="4" cols="60" id="notepad"></textarea>
+			</div>
+	    </div>
+	</div>
+</div>
+
+<script>
+	$("#user_input").keypress(function(e) {
+		if (e.keyCode == 13){
+			e.preventDefault();
+			$.ajax({
+			  type: "GET",
+			  url: "converse/",
+			  data: {'user_input': $("#user_input").val()}
+			}).done(function( resp ) {
+			   $("#chatbox").val($("#chatbox").val() + '\n\n' + resp);
+			   $("#user_input").val('');
+			});
+		}
+	});
+
+	$("#watson_input").keypress(function(e) {
+		if (e.keyCode == 13){
+			e.preventDefault();
+			$.ajax({
+			  type: "GET",
+			  url: "watson/",
+			  data: {'user_input': $("#watson_input").val()}
+			}).done(function( resp ) {
+			   $("#watsonbox").val($("#watsonbox").val() + '\n\n' + resp);
+			   $("#watson_input").val('');
+			});
+		}
+	});
+	
+</script>
+
+</body>
+</html>
