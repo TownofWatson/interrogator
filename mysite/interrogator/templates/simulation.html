@@ -13,40 +13,39 @@
 <body>
 
 <div class="container-fluid">
-	<h1>Simulation</h1>
-	<p>Figure out who the suspects are through observation, wit, and tact!</p>
+
 	<div class="row">
 		<div class="col-sm-6">
-			Interrogation Room
+			<h3>Interrogation Room</h3>
 			<div class="form-group">
 				<textarea class="form-control" rows="15" cols="60" id="chatbox">{{response}}</textarea>
 			</div> 
 			<div class="form-group">
+				<label>Interrogate the suspect.</label>
 				<textarea class="form-control" rows="2" cols="60" id="user_input"></textarea>
 			</div>
 		</div>
 
 	    <div class="col-sm-6">
-	    	Watson/Case Files/Notes
-	    	<div class="form-group">
-				<textarea class="form-control" rows="10" cols="60" id="watsonbox">Hello, I'm Watson!</textarea>
-			</div> 
+	    	<h3 id="watson_response">Hello, I'm Watson!</h3>
+	    	<div class="buttons">
+			</div>
+			<div>
+				
+				<iframe id='display_pdf' src='' width="600" height="400"></iframe>
+			</div>
 			<div class="form-group">
+				<label>Ask watson to get documents from the Filing Cabinets.</label>
 				<textarea class="form-control" rows="1" cols="60" id="watson_input"></textarea>
 			</div>
 			<div class="form-group">
+				<label>Notebook.</label>
 				<textarea class="form-control" rows="4" cols="60" id="notepad"></textarea>
 			</div>
 	    </div>
 	</div>
-	<div>
-		<object data="/Users/derek/Projects/5914/interrogator/interrogator/mysite/pdfs/gen/report_test_1.pdf" type="application/x-pdf" title="SamplePdf" width="500" height="720">
-    <a href="/../../pdfs/gen/report_test_1.pdf">shree</a> 
-</object>
-
-
-			</div>
 </div>
+
 
 <script>
 	$("#user_input").keypress(function(e) {
@@ -72,11 +71,55 @@
 			  url: "watson/",
 			  data: {'user_input': $("#watson_input").val()}
 			}).done(function( resp ) {
-			   $("#chatbox").val($("#chatbox").val() + '\n\n' + $("#watson_input").val());
-			   $("#watsonbox").val($("#watsonbox").val() + '\n\n' + resp);
+			   $("#watson_response").html(resp);
 			   $("#watson_input").val('');
+			   $.ajax({
+				  type: "GET",
+				  url: "watson_button_length/",
+				  data: {}
+				}).done(function( resp_len ) {
+				   $("div.button_line").remove();
+				   $("div.buttons").append("<div class='button_line'></div>");
+				   for (i = 0; i < parseInt(resp_len); i++) { 
+				   	$.ajax({
+					  type: "GET",
+					  url: "watson_button_label/",
+					  data: {'user_input': i}
+					}).done(function( resp1 ) {
+						var name = "btn_" + i;
+					    var but = $('<input/>',
+					    {
+					        type: 'button',
+					        id: resp1,
+					        style: "background-color: #4CAF50;border: none;color: white;padding: 15px 32px;text-align: center;text-decoration: none;display: inline-block;font-size: 16px; margin:5px 5xp 0px 5px",
+					        value: resp1.substring(0, resp1.length-4),
+					        click: function () { 
+					        	var x = this.id;
+					        	$.ajax({
+								  type: "GET",
+								  url: "watson_button_respond/",
+								  data: {'user_input': x}
+								}).done(function( resp1 ) {
+									$("#display_pdf").attr('src', resp1+"#toolbar=0&navpanes=0");
+								});
+							}
+					    });
+					    $('div.button_line').append(but);
+					});
+				   }
+				});
 			});
+
 		}
+	});
+	$("#btn_1").click(function(e) {
+		e.preventDefault();
+		$.ajax({
+		  type: "GET",
+		  url: "watson_button/",
+		  data: {'user_input': 1}
+			}).done(function( resp ) {
+		});
 	});
 	
 </script>

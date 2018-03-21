@@ -115,6 +115,8 @@ def pdf_to_html(output):
 	webbrowser.open('file://'+path)
 	return True
 
+
+
 def process_who_query(output):
 	return True
 
@@ -232,8 +234,11 @@ def ask_watson(question):
 	name = "default"
 	response = 999999999
 	if(len(extrac) > 0):
-		respond = respond + "I've found some relevant documents for ya \n"
-		respond = respond + list_options_res(extrac)
+		#creating response
+
+		respond = respond + "I've found some relevant documents for ya"
+
+		#respond = respond + list_options_res(extrac)
 
 	else:
 		respond = respond + "I've got nothin for ya"
@@ -271,21 +276,21 @@ def list_options(extrac):
 def handle_list_response_ask(response, extrac):
 	text_response = "Hmm\n\n"
 	if((response) == len(extrac)+1):
-		text_response = "Hope I helped.\n\n"
+		text_response = "Hope I helped."
 		#watson_opinion(question_blob, extrac)
 
 	elif((response) == len(extrac)):
 
-		text_response = "Sorry mate, I just can't find anything relevant\n\n"
+		text_response = "Sorry mate, I just can't find anything relevant"
 
 	elif(response > len(extrac)):
 
 		text_response = "OOB\n\n"
 
 	else:
-		text_response = "Here ya go mate\n\n"
-		#print_to_html('pdfs/gen/'+str(extrac[response]))
-		pdf_to_html('pdfs/gen/'+str(extrac[response]))
+		text_response = "Here ya go mate"
+		print_to_html('pdfs/gen/'+str(extrac[response]))
+		#pdf_to_html('pdfs/gen/'+str(extrac[response]))
 
 	return(text_response)
 
@@ -305,8 +310,8 @@ def handle_list_response(response, extrac, question_blob):
 
 	else:
 		text_response = "Here ya go mate\n\n"
-		#print_to_html('pdfs/gen/'+str(extrac[response]))
-		pdf_to_html('pdfs/gen/'+str(extrac[response]))
+		print_to_html('pdfs/gen/'+str(extrac[response]))
+		#pdf_to_html('pdfs/gen/'+str(extrac[response]))
 
 	print(text_response)
 

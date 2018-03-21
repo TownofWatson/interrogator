@@ -3,6 +3,8 @@ from django.http import HttpResponse
 from django.core.management import call_command
 from django.views.decorators.csrf import csrf_exempt
 from watson_developer_cloud import ConversationV1
+from django.templatetags.static import static
+
 import json
 from watson import *
 
@@ -16,7 +18,7 @@ workspace_id = '225a20b1-c3c2-429b-87ba-b389eefc8853'
 context = {}
 
 watson_state = 0
-extrac = ""
+extrac = []
 
 # Create your views here.
 def index(request):
@@ -50,12 +52,30 @@ def converse(request):
 def watson(request):
 	global watson_state
 	global extrac
-	if(watson_state ==0):
-		response, extrac = ask_watson(request.GET.get('user_input'))
-		watson_state = 1
-	elif(watson_state ==1):
-		success, response = ask_watson_response(request.GET.get('user_input'), extrac)
-		if(success != 0):
-			watson_state = 0
+	# if(watson_state ==0):
+	# 	response, extrac = ask_watson(request.GET.get('user_input'))
+	# 	watson_state = 1
+	# elif(watson_state ==1):
+	# 	success, response = ask_watson_response(request.GET.get('user_input'), extrac)
+	# 	if(success != 0):
+	# 		watson_state = 0
 
+	response, extrac = ask_watson(request.GET.get('user_input'))
+
+	return HttpResponse(response)
+
+def watson_button_label(request):
+	return HttpResponse(extrac[int(request.GET.get('user_input'))])
+
+def watson_button_length(request):
+	return HttpResponse(len(extrac))
+
+def watson_button_respond(request):
+	path = 'pdfs/gen/'+str(request.GET.get('user_input'))
+	#print_to_html(path)
+	return HttpResponse("/static/"+path)
+
+
+def watson_button(request):
+	success, response = ask_watson_response(request.GET.get('user_input'), extrac)	
 	return HttpResponse(response)
