@@ -10,7 +10,8 @@ import mimetypes
 #from textblob import Word
 from watson_developer_cloud import DiscoveryV1
 import random
-import ctypes  
+import ctypes 
+import PyPDF2 
 
 response_for_not_knowing = ["Couldn't tell ya, mate", "I'm not quite sure I can answer that.", 
 "Well pickle me tender, I've no clue.", "That is a really good question", "Huh",  "You know, there are some questions that even I can't answer",
@@ -68,14 +69,49 @@ def natural_language_lookup(s, count, discovery, watson_environment_id, watson_c
 	#easygui.msgbox(str(output_text), 'Watson Says')
 	return output, my_query, extrac
 
+
+# def pdf_view(request):
+# 	path = os.path.abspath(request)
+#     with open(path, 'r') as pdf:
+#         response = HttpResponse(pdf.read(), mimetype='application/pdf')
+#         response['Content-Disposition'] = 'inline;filename=some_file.pdf'
+#         return response
+#     pdf.closed
+
+
 def print_to_html(output):
 	if (len(output) > 50):
 		html = '<html>' + output.replace('\n','<br>') + '</html>'
 		path = os.path.abspath('temp.html')
+		#print(path)
 		with open(path, 'w') as f:
 			f.write(html)
 	else:
 		path = os.path.abspath(output)
+		print(path)
+
+	webbrowser.open('file://'+path)
+	return True
+
+def pdf_to_html(output):
+
+	pdf_path = os.path.abspath(output)
+
+	pdfFileObj = open(pdf_path, 'rb')
+
+	pdfReader = PyPDF2.PdfFileReader(pdfFileObj)
+
+	pageObj = pdfReader.getPage(0)
+	pdf_text = ''
+	for page in range(0, pdfReader.numPages-1):
+		pdf_text = pdf_text + pdfReader.getPage(page).extractText()
+
+	html = '<html>' + pdf_text.replace('\n','<br>') + '</html>'
+	path = os.path.abspath('temp.html')
+		#print(path)
+	with open(path, 'w') as f:
+		f.write(html)
+
 	webbrowser.open('file://'+path)
 	return True
 
@@ -248,7 +284,9 @@ def handle_list_response_ask(response, extrac):
 
 	else:
 		text_response = "Here ya go mate\n\n"
-		print_to_html('pdfs/gen/'+str(extrac[response]))
+		#print_to_html('pdfs/gen/'+str(extrac[response]))
+		pdf_to_html('pdfs/gen/'+str(extrac[response]))
+
 	return(text_response)
 
 def handle_list_response(response, extrac, question_blob):
@@ -267,7 +305,9 @@ def handle_list_response(response, extrac, question_blob):
 
 	else:
 		text_response = "Here ya go mate\n\n"
-		print_to_html('pdfs/gen/'+str(extrac[response]))
+		#print_to_html('pdfs/gen/'+str(extrac[response]))
+		pdf_to_html('pdfs/gen/'+str(extrac[response]))
+
 	print(text_response)
 
 	#print_to_html(output)
