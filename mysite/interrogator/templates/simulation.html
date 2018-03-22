@@ -98,6 +98,7 @@
 					  url: "watson_button_label/",
 					  data: {'user_input': i}
 					}).done(function( resp1 ) {
+						//button creation for each result
 						var name = "btn_" + i;
 					    var but = $('<input/>',
 					    {
@@ -115,6 +116,7 @@
 									$("#display_pdf").attr('src', resp1+"#toolbar=0&navpanes=0");
 
 								});
+								//History button creation
 								var name = "btn_" + x;
 					    		var but_hist = $('<input/>',
 					    		{
@@ -135,6 +137,7 @@
 										});
 									}
 								});
+								//remove buttons if too many are present
 								$('div.button_history').append(but_hist);
 								if($('div.button_history').children().length > 7){
 									$('.history').first().remove();
