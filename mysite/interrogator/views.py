@@ -49,6 +49,11 @@ def converse(request):
 	
 	return HttpResponse(json.dumps(response['output']['text'][0],indent=2))
 
+def converse_person_change(request):
+	name = request.GET.get('user_input')
+	return("yes")
+
+
 def watson(request):
 	global watson_state
 	global extrac
@@ -74,7 +79,6 @@ def watson_button_respond(request):
 	path = 'pdfs/gen/'+str(request.GET.get('user_input'))
 	#print_to_html(path)
 	return HttpResponse("/static/"+path)
-
 
 def watson_button(request):
 	success, response = ask_watson_response(request.GET.get('user_input'), extrac)	

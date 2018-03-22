@@ -20,13 +20,18 @@
 	<div class="row">
 		<div class="col-sm-6">
 			<h3>Interrogation Room</h3>
+			<h4 style="float:left; margin-right:15px">Suspects:</h4>
+			<div class="suspect_bar"></div>
 			<div class="form-group">
-				<textarea class="form-control" rows="15" cols="60" id="chatbox">{{response}}</textarea>
+				<textarea  rows="15" cols="60" id="chatbox" style="min-width:600px; min-height:200px; max-width:600px">{{response}}</textarea>
+				<div class="leave_bar" style="float:right"></div>
+
 			</div> 
 			<div class="form-group">
 				<label>Interrogate the suspect.</label>
-				<textarea class="form-control" rows="2" cols="60" id="user_input"></textarea>
+				<textarea class="form-control" rows="2" cols="60" id="user_input" style="min-width:600px; min-height:50px; max-width:600px"></textarea>
 			</div>
+
 		</div>
 
 	    <div class="col-sm-6" >
@@ -34,7 +39,7 @@
 	    	<div>
 	    	<div class="buttons" style="min-height:34px">
 	    		<div class="button_line">
-	    			<input type="button" id="btn" value="Watson" style="background-color: #4CAF50;border: none;color: white;padding: 5px 15px;text-align: center;text-decoration: none;display: inline-block;font-size: 16px; margin:2px; margin-bottom:0px; border-top-left-radius: 5px; border-top-right-radius: 5px">
+	    			<input type="button" id="btn" value="Watson" style="background-color: #4db8ff;border: none;color: white;padding: 5px 15px;text-align: center;text-decoration: none;display: inline-block;font-size: 16px; margin:2px; margin-bottom:0px; border-top-left-radius: 5px; border-top-right-radius: 5px">
 	    		</div>
 			</div>
 
@@ -48,11 +53,11 @@
 			</div>
 			<div class="form-group">
 				<label>Ask watson to get documents from the Filing Cabinets.</label>
-				<textarea class="form-control" rows="1" cols="60" id="watson_input"></textarea>
+				<textarea class="form-control" rows="1" cols="60" id="watson_input" style="min-width:600px; min-height:50px; max-width:600px"></textarea>
 			</div>
 			<div class="form-group">
 				<label>Notebook.</label>
-				<textarea class="form-control" rows="4" cols="60" id="notepad"></textarea>
+				<textarea class="form-control" rows="4" cols="60" id="notepad" style="min-width:600px; min-height:100px; max-width:600px"></textarea>
 			</div>
 
 	    </div>
@@ -162,6 +167,52 @@
 			}).done(function( resp ) {
 		});
 	});
+	var num_buttons_people = 4;
+	var people = ["Jimmy", "Eduardo", "Gabriella", "Calum"];
+	for(i = 0; i < people.length; i++){
+		var name = "person" + i;
+	    var but = $('<input/>',
+	    {
+	        type: 'button',
+	        id: people[i],
+	        style: "background-color: #4CAF50;border: none;color: white;padding: 5px 15px;text-align: center;text-decoration: none;display: inline-block;font-size: 16px; margin:2px; margin-bottom:0px; border-radius: 5px",
+	        value: people[i],
+	        click: function () { 
+	        	var x = this.id;
+	        	$.ajax({
+				  type: "GET",
+				  url: "converse/",
+				  data: {'user_input': x}
+				}).done(function( resp ) {
+			   		$("#chatbox").val($("#chatbox").val() + '\n\n' + resp);
+			   		$("#user_input").val('');
+				});
+			}
+		});
+		$('div.suspect_bar').append(but);
+
+	}
+	var name = "leave";
+    var but_leave = $('<input/>',
+    {
+        type: 'button',
+        id: name,
+        style: "background-color: #FF0000;border: none;color: white;padding: 5px 15px;text-align: center;text-decoration: none;display: inline-block;font-size: 16px; margin:2px; margin-bottom:0px; border-radius: 5px;",
+        value: "Exit Room",
+        click: function () { 
+        	var x = this.id;
+        	$.ajax({
+			  type: "GET",
+			  url: "converse/",
+			  data: {'user_input': x}
+			}).done(function( resp ) {
+		   		$("#chatbox").val($("#chatbox").val() + '\n\n' + resp);
+		   		$("#user_input").val('');
+			});
+		}
+	});
+	$('div.leave_bar').append(but_leave);
+
 	
 </script>
 
