@@ -188,7 +188,7 @@
 	        	$.ajax({
 				  type: "GET",
 				  url: "converse/",
-				  data: {'user_input': x}
+				  data: {'user_input': 'leave'}
 				}).done(function( resp ) {
 			   		$("#chatbox").val($("#chatbox").val() + '\n\n' + resp);
 			   		$("#user_input").val('');
@@ -200,7 +200,7 @@
 				   		$("#chatbox").val($("#chatbox").val() + '\n\n' + resp);
 				   		$("#user_input").val('');
 				   		$("#display_pic_pdf").attr('src', "/static/pdfs/gen/"+x+".PNG");
-				   		$("conv_response").html("You're now looking in the eyes of " + x);
+				   		$("#conv_response").html("You're now looking in the eyes of " + x);
 					});
 				});
 			}
