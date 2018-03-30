@@ -9,6 +9,8 @@
 	<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" type="text/css"/>
 	<script src="{% static 'js/bootstrap.min.js' %}"></script> 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 	<style type="text/css">
 		body {background-color: white}
 	</style>
@@ -22,7 +24,7 @@
 			<h3>Interrogation Room</h3>
 			<h4 style="float:left; margin-right:15px">Suspects:</h4>
 			<div class="suspect_bar"></div>
-			<iframe id='display_pic_pdf' src='/static/pdfs/gen/tenor.gif' frameborder="1" width="600" height="450"></iframe>
+			<iframe id='display_pic_pdf' src='/static/pdfs/gen/case_briefing.pdf' frameborder="1" width="600" height="450"></iframe>
 			<h3 id="conv_response"></h3>
 			
 
@@ -33,7 +35,7 @@
 			</div>
 			<div class="form-group">
 				<textarea  rows="15" cols="60" id="chatbox" style="min-width:600px; min-height:200px; max-width:600px; display:">{{response}}</textarea>
-				<div class="leave_bar" style="float:right"></div>
+				<div class="guess_bar"><input style="min-width: 450px;max-width: 450px" type="text" id="guess_input"></div>
 
 			</div> 
 		</div>
@@ -66,6 +68,21 @@
 
 	    </div>
 	</div>
+</div>
+
+<div class="modal" id="results_modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="mod_title"></h5>
+      </div>
+      <div class="modal-body" id="results_display">
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="restart_btn" class="btn btn-primary" data-dismiss="modal" onclick="location.reload(true)">Restart</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 
@@ -174,7 +191,7 @@
 		});
 	});
 	var num_buttons_people = 4;
-	var people = ["Jimmy", "Eduardo", "Gabriella", "Calum"];
+	var people = ["Jimmy", "Eduardo", "Gabriella", "Calum", "Lukas", "Camille"];
 	for(i = 0; i < people.length; i++){
 		var name = "person" + i;
 	    var but = $('<input/>',
@@ -208,26 +225,31 @@
 		$('div.suspect_bar').append(but);
 
 	}
-	var name = "leave";
+
     var but_leave = $('<input/>',
     {
         type: 'button',
         id: name,
         style: "background-color: #FF0000;border: none;color: white;padding: 5px 15px;text-align: center;text-decoration: none;display: inline-block;font-size: 16px; margin:2px; margin-bottom:0px; border-radius: 5px;",
-        value: "Exit Room",
+        value: "Convict Suspect",
         click: function () { 
-        	var x = this.id;
-        	$.ajax({
-			  type: "GET",
-			  url: "converse/",
-			  data: {'user_input': x}
-			}).done(function( resp ) {
-		   		$("#chatbox").val($("#chatbox").val() + '\n\n' + resp);
-		   		$("#user_input").val('');
-			});
+        	var name = $("#guess_input").val();
+        	if (name !== ""){
+	        	$.ajax({
+				  type: "GET",
+				  url: "guess_suspect/",
+				  data: {'user_input': name}
+				}).done(function( resp ) {
+			   		$("#chatbox").val($("#chatbox").val() + '\n\n' + resp);
+			   		$('#mod_title').html("You've convicted <b>" + name.substr(0,1).toUpperCase() + name.substr(1) + "</b>");
+			   		$('#results_display').append(resp);
+			   		$("#guess_input").val('');
+			   		$("#results_modal").modal("show");
+				});
+			}
 		}
 	});
-	$('div.leave_bar').append(but_leave);
+	$('div.guess_bar').append(but_leave);
 
 	
 </script>

@@ -30,7 +30,6 @@ def simulation(request):
 	response = conversation.message(
 	    workspace_id=workspace_id,
 	    message_input={'text': user_input},
-	    context = context,
 	)
 
 	context = response['context']
@@ -47,11 +46,17 @@ def converse(request):
 
 	context = response['context']
 	
-	return HttpResponse(json.dumps(response['output']['text'][0],indent=2))
+	return HttpResponse(json.dumps(response['output']['text'][0],indent=2)[1:-1])
 
 def converse_person_change(request):
 	name = request.GET.get('user_input')
 	return("yes")
+
+def guess_suspect(request):
+	guess = request.GET.get('user_input')
+	if guess == 'Gabriella' or guess == 'gabriella':
+		return HttpResponse("You're correct!")
+	return HttpResponse("You're incorrect!")
 
 
 def watson(request):
