@@ -231,7 +231,7 @@
         type: 'button',
         id: name,
         style: "background-color: #FF0000;border: none;color: white;padding: 5px 15px;text-align: center;text-decoration: none;display: inline-block;font-size: 16px; margin:2px; margin-bottom:0px; border-radius: 5px;",
-        value: "Convict Suspect",
+        value: "Arrest Suspect",
         click: function () { 
         	var name = $("#guess_input").val();
         	if (name !== ""){
@@ -241,7 +241,7 @@
 				  data: {'user_input': name}
 				}).done(function( resp ) {
 			   		$("#chatbox").val($("#chatbox").val() + '\n\n' + resp);
-			   		$('#mod_title').html("You've convicted <b>" + name.substr(0,1).toUpperCase() + name.substr(1) + "</b>");
+			   		$('#mod_title').html("You've arrested <b>" + name.toUpperCase() + "</b>");
 			   		$('#results_display').append(resp);
 			   		$("#guess_input").val('');
 			   		$("#results_modal").modal("show");
