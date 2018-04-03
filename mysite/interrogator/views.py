@@ -54,9 +54,12 @@ def converse_person_change(request):
 
 def guess_suspect(request):
 	guess = request.GET.get('user_input')
-	if guess == 'Gabriella' or guess == 'gabriella':
-		return HttpResponse("You're correct!")
-	return HttpResponse("You're incorrect!")
+	final_message = ""
+	if guess.lower() == 'gabriella fresquez' or guess.lower() == 'gabriella':
+		final_message = "Congratulations! You successfully apprehended the criminal, Gabriella Fresquez."
+	else:
+		final_message = guess.upper() + " is not the culprit! You've convicted an innocent while the real criminal disappeared without a trace.\n Press 'restart' to try again."
+	return HttpResponse(final_message)
 
 
 def watson(request):
