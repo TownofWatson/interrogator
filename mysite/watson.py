@@ -152,8 +152,7 @@ def connect():
 		password="OlSYr70ryMdK",
 		version="2017-11-07"
 	)
-
-
+	print(discovery)
 	#environments = discovery.list_environments()
 	environments = discovery.get_environments()
 

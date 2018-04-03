@@ -4,10 +4,9 @@ from django.core.management import call_command
 from django.views.decorators.csrf import csrf_exempt
 from watson_developer_cloud import ConversationV1
 from django.templatetags.static import static
-
+import os.path
 import json
 from watson import *
-
 conversation = ConversationV1(
 	username = 'a2f2135d-5741-4364-803b-66b8116a9b5f',
 	password = 'ldTcfTljOKKr',
