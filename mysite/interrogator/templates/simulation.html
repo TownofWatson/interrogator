@@ -216,7 +216,7 @@
 					}).done(function( resp ) {
 				   		$("#chatbox").val($("#chatbox").val() + '\n\n' + resp);
 				   		$("#user_input").val('');
-				   		$("#display_pic_pdf").attr('src', "/static/pdfs/gen/"+x+".PNG");
+				   		$("#display_pic_pdf").attr('src', "/static/pdfs/gen/"+x+"_background.PNG");
 				   		$("#conv_response").html("You're now looking in the eyes of " + x);
 					});
 				});
