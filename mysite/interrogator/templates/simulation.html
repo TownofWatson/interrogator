@@ -31,8 +31,11 @@
 
 			<div class="form-group">
 				<label>Interrogate the suspect.</label>
+							<div class="speak_bar" style="float:right;padding-bottom:5px"></div>
+
 				<textarea class="form-control" rows="2" cols="60" id="user_input" style="min-width:600px; min-height:50px; max-width:600px"></textarea>
 			</div>
+
 			<div class="form-group">
 				<textarea  rows="15" cols="60" id="chatbox" style="min-width:600px; min-height:200px; max-width:600px; display:none">{{response}}</textarea>
 				<div class="guess_bar"><input style="min-width: 450px;max-width: 450px" type="text" id="guess_input"></div>
@@ -48,7 +51,6 @@
 	    			<input type="button" id="btn" value="Watson" style="background-color: #4db8ff;border: none;color: white;padding: 5px 15px;text-align: center;text-decoration: none;display: inline-block;font-size: 16px; margin:2px; margin-bottom:0px; border-top-left-radius: 5px; border-top-right-radius: 5px">
 	    		</div>
 			</div>
-
 				<div style="min-width:700">
 					<iframe id='display_pdf' src='/static/pdfs/watson_inverted.gif' frameborder="1" width="600" height="450"></iframe>
 					<div class="button_history_holder" style="min-height: 25px">
@@ -98,9 +100,15 @@
 			   $("#chatbox").val($("#chatbox").val() + '\n\n' + $("#user_input").val());
 			   $("#chatbox").val($("#chatbox").val() + '\n\n' + resp);
 			   $("#conv_response").html(resp);
-
 			   $("#user_input").val('');
+			   var pp = resp;
+			   $.ajax({
+				  type: "GET",
+				  url: "speak/",
+				  data: {'user_input': pp}
+				});
 			});
+
 		}
 	});
 
@@ -249,7 +257,24 @@
 			}
 		}
 	});
+
 	$('div.guess_bar').append(but_leave);
+
+	var but_talk = $('<input/>',
+    {
+        type: 'button',
+        id: "toggle_speak",
+        style: "background-color: #FF0000;border: none;color: white;padding: 5px 15px;text-align: center;text-decoration: none;display: inline-block;font-size: 16px; margin:2px; margin-bottom:0px; border-radius: 5px;",
+        value: "Toggle Speak",
+        click: function () { 
+        	$.ajax({
+			  type: "GET",
+			  url: "speak_switch/",
+			  data: {}
+			});
+		}
+	});
+	$('div.speak_bar').append(but_talk);
 
 	
 </script>

@@ -6,6 +6,7 @@ from watson_developer_cloud import ConversationV1
 from django.templatetags.static import static
 import os.path
 import json
+from testspeech import *
 from watson import *
 conversation = ConversationV1(
 	username = 'a2f2135d-5741-4364-803b-66b8116a9b5f',
@@ -15,7 +16,7 @@ conversation = ConversationV1(
 workspace_id = '225a20b1-c3c2-429b-87ba-b389eefc8853'
 
 context = {}
-
+speaking = True
 watson_state = 0
 extrac = []
 
@@ -42,10 +43,26 @@ def converse(request):
 	    message_input={'text': request.GET.get('user_input')},
 	    context = context,
 	)
-
 	context = response['context']
-	
+	text_read = json.dumps(response['output']['text'][0],indent=2)[1:-1]
+
+
 	return HttpResponse(json.dumps(response['output']['text'][0],indent=2)[1:-1])
+
+def speak(request):
+	global speaking
+	read = request.GET.get('user_input')
+	if(read.find(':') != -1 and speaking == True):
+		speak_text(read[read.find(':'):], 'en')
+
+	return 1
+
+def speak_switch(request):
+
+	global speaking 
+	speaking = not speaking
+
+	return 1
 
 def converse_person_change(request):
 	name = request.GET.get('user_input')
