@@ -14,6 +14,6 @@ urlpatterns = [
     path('simulation/speak/', views.speak, name='speak'),
     path('simulation/speak_switch/', views.speak_switch, name='speak_switch'),
 
-    path('simulation/watson_button_length/', views.watson_button_length, name='watson_button_length')
-
+    path('simulation/watson_button_length/', views.watson_button_length, name='watson_button_length'),
+    path('simulation/translate_input/', views.translate_input, name='translate_input'),
 ]

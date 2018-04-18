@@ -7,7 +7,7 @@
 	<meta clearset="utf-8" />
 	{% load staticfiles %}
 	<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" type="text/css"/>
-	<script src="{% static 'js/bootstrap.min.js' %}"></script> 
+	<script src="{% static 'js/bootstrap.min.js' %}"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
@@ -26,7 +26,7 @@
 			<div class="suspect_bar"></div>
 			<iframe id='display_pic_pdf' src='/static/pdfs/gen/case_briefing.pdf#toolbar=0&navpanes=0' frameborder="1" width="600" height="450"></iframe>
 			<h3 id="conv_response"></h3>
-			
+
 
 
 			<div class="form-group">
@@ -40,7 +40,7 @@
 				<textarea  rows="15" cols="60" id="chatbox" style="min-width:600px; min-height:200px; max-width:600px; display:none">{{response}}</textarea>
 				<div class="guess_bar"><input style="min-width: 450px;max-width: 450px" type="text" id="guess_input"></div>
 
-			</div> 
+			</div>
 		</div>
 
 	    <div class="col-sm-6" >
@@ -94,8 +94,8 @@
 			e.preventDefault();
 			$.ajax({
 			  type: "GET",
-			  url: "converse/",
-			  data: {'user_input': $("#user_input").val()}
+				url: "translate_input/",
+				data: {'user_input': $("#user_input").val(),'language': 'Spanish'}
 			}).done(function( resp ) {
 			   $("#chatbox").val($("#chatbox").val() + '\n\n' + $("#user_input").val());
 			   $("#chatbox").val($("#chatbox").val() + '\n\n' + resp);
@@ -129,7 +129,7 @@
 				}).done(function( resp_len ) {
 				   $("div.button_line").remove();
 				   $("div.buttons").append("<div class='button_line'></div>");
-				   for (i = 0; i < parseInt(resp_len); i++) { 
+				   for (i = 0; i < parseInt(resp_len); i++) {
 				   	$.ajax({
 					  type: "GET",
 					  url: "watson_button_label/",
@@ -143,7 +143,7 @@
 					        id: resp1,
 					        style: "background-color: #4CAF50;border: none;color: white;padding: 5px 15px;text-align: center;text-decoration: none;display: inline-block;font-size: 16px; margin:2px; margin-bottom:0px; border-top-left-radius: 5px; border-top-right-radius: 5px",
 					        value: resp1.substring(0, resp1.length-4),
-					        click: function () { 
+					        click: function () {
 					        	var x = this.id;
 					        	$.ajax({
 								  type: "GET",
@@ -162,7 +162,7 @@
 					        		id: x,
 					        		style: "background-color: #4CAF50;border: none;color: white;padding: 2px 6px;text-align: center;text-decoration: none;display: inline-block;font-size: 11px; margin:2px; margin-bottom:0px; border-radius: 5px",
 					        		value: x.substring(0, x.length-4),
-					        		click: function () { 
+					        		click: function () {
 					        			var x = this.id;
 					        			$.ajax({
 								  			type: "GET",
@@ -170,7 +170,7 @@
 								  			data: {'user_input': x}
 										}).done(function( resp1 ) {
 											$("#display_pdf").attr('src', "/static/pdfs/gen/"+x+"#toolbar=0&navpanes=0");
-									
+
 										});
 									}
 								});
@@ -208,7 +208,7 @@
 	        id: people[i],
 	        style: "background-color: #4CAF50;border: none;color: white;padding: 5px 15px;text-align: center;text-decoration: none;display: inline-block;font-size: 16px; margin:2px; margin-bottom:0px; border-radius: 5px",
 	        value: people[i],
-	        click: function () { 
+	        click: function () {
 	        	var x = this.id;
 	        	$.ajax({
 				  type: "GET",
@@ -240,7 +240,7 @@
         id: name,
         style: "background-color: #FF0000;border: none;color: white;padding: 5px 15px;text-align: center;text-decoration: none;display: inline-block;font-size: 16px; margin:2px; margin-bottom:0px; border-radius: 5px;",
         value: "Arrest Suspect",
-        click: function () { 
+        click: function () {
         	var name = $("#guess_input").val();
         	if (name !== ""){
 	        	$.ajax({
@@ -266,7 +266,7 @@
         id: "toggle_speak",
         style: "background-color: #FF0000;border: none;color: white;padding: 5px 15px;text-align: center;text-decoration: none;display: inline-block;font-size: 16px; margin:2px; margin-bottom:0px; border-radius: 5px;",
         value: "Toggle Speak",
-        click: function () { 
+        click: function () {
         	$.ajax({
 			  type: "GET",
 			  url: "speak_switch/",
@@ -276,7 +276,7 @@
 	});
 	$('div.speak_bar').append(but_talk);
 
-	
+
 </script>
 
 </body>
