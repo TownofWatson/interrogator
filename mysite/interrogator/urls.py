@@ -12,7 +12,9 @@ urlpatterns = [
     path('simulation/converse_person_change/', views.converse_person_change, name='converse_person_change'),
     path('simulation/guess_suspect/', views.guess_suspect, name='guess_suspect'),
     path('simulation/get_speech/', views.get_speech, name='get_speech'),
-
-    path('simulation/watson_button_length/', views.watson_button_length, name='watson_button_length')
-
+    path('simulation/speak/', views.speak, name='speak'),
+    path('simulation/speak_switch/', views.speak_switch, name='speak_switch'),
+    path('simulation/change_language/', views.change_language, name='change_language'),
+    path('simulation/watson_button_length/', views.watson_button_length, name='watson_button_length'),
+    path('simulation/translate_input/', views.translate_input, name='translate_input'),
 ]

@@ -3,9 +3,11 @@ from django.http import HttpResponse
 from django.core.management import call_command
 from django.views.decorators.csrf import csrf_exempt
 from watson_developer_cloud import ConversationV1
+from watson_developer_cloud import LanguageTranslatorV2
 from django.templatetags.static import static
 import os.path
 import json
+from testspeech import *
 from watson import *
 import speech_recognition as sr
 
@@ -14,12 +16,20 @@ conversation = ConversationV1(
 	password = 'ldTcfTljOKKr',
 	version = '2017-05-26'
 )
+
+language_translator = LanguageTranslatorV2(
+  username= 'd983f17b-f4dc-4af1-baec-d6bebd118ef1',
+  password= 'WpeErdZeiPXZ',
+  url= 'https://gateway.watsonplatform.net/language-translator/api'
+)
+
 workspace_id = '225a20b1-c3c2-429b-87ba-b389eefc8853'
 
 context = {}
-
+speaking = True
 watson_state = 0
 extrac = []
+language = 'fr'
 
 # Create your views here.
 def index(request):
@@ -46,8 +56,42 @@ def converse(request):
 	)
 
 	context = response['context']
-	
+
 	return HttpResponse(json.dumps(response['output']['text'][0],indent=2)[1:-1])
+
+def converse2(request):
+	global context
+	response = conversation.message(
+	    workspace_id=workspace_id,
+	    message_input={'text': request},
+	    context = context,
+	)
+
+	context = response['context']
+
+	return (json.dumps(response['output']['text'][0],indent=2)[1:-1])
+
+
+def change_language(request):
+	global language
+	language = request.GET.get('user_input')
+	return 1
+
+def speak(request):
+	global speaking
+	global language
+	read = request.GET.get('user_input')
+	if(read.find(':') != -1 and speaking == True):
+		speak_text(read[read.find(':'):], language)
+
+	return 1
+
+def speak_switch(request):
+
+	global speaking
+	speaking = not speaking
+
+	return 1
 
 def converse_person_change(request):
 	name = request.GET.get('user_input')
@@ -78,6 +122,26 @@ def watson(request):
 
 	return HttpResponse(response)
 
+def translate_input(request):
+	#lang=raw_input("Choose a language: ")
+	sentence=request.GET.get('user_input')
+
+	language=request.GET.get('language')
+	print(language)
+	print(sentence)
+	langEncoding=""
+
+	if language == 'Spanish':
+	    	translation = language_translator.translate(text=sentence,model_id="es-en")
+	if language == 'French':
+			translation = language_translator.translate(text=sentence,model_id="fr-en")
+	if language == 'English':
+			translation = sentence
+
+	print(translation)
+	#response = json.dumps(translation['translations'])
+	return HttpResponse(converse2(translation))
+
 def watson_button_label(request):
 	return HttpResponse(extrac[int(request.GET.get('user_input'))])
 
@@ -90,7 +154,7 @@ def watson_button_respond(request):
 	return HttpResponse("/static/"+path)
 
 def watson_button(request):
-	success, response = ask_watson_response(request.GET.get('user_input'), extrac)	
+	success, response = ask_watson_response(request.GET.get('user_input'), extrac)
 	return HttpResponse(response)
 
 def get_speech(request):

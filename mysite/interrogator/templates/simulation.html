@@ -7,7 +7,7 @@
 	<meta clearset="utf-8" />
 	{% load staticfiles %}
 	<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" type="text/css"/>
-	<script src="{% static 'js/bootstrap.min.js' %}"></script> 
+	<script src="{% static 'js/bootstrap.min.js' %}"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
@@ -27,16 +27,18 @@
 			<div class="suspect_bar"></div>
 			<iframe id='display_pic_pdf' src='/static/pdfs/gen/case_briefing.pdf#toolbar=0&navpanes=0' frameborder="1" width="600" height="450"></iframe>
 			<h3 id="conv_response"></h3>
-			
+
 
 
 			<div class="form-group">
 				<label>Interrogate the suspect.</label>
 				<div class="form-inline">
-					<input class="form-control" rows="2" cols="60" id="user_input" style="min-width:550px; min-height:50px; max-width:550px"></input>
+					<div class="speak_bar" style="float:right;padding-bottom:5px"></div>
+					<textarea class="form-control" rows="2" cols="60" id="user_input" style="min-width:550px; min-height:50px; max-width:550px"></textarea>
 					<button type="button" id="mic_button" style="min-width: 50px;max-width: 50px;min-height: 50px;background: none; border: none;text-align: center; vertical-align: top;" onclick="use_mic()"><i id="mic" style="font-size:30px;" class="fa">&#xf130;</i></button>
 				</div>
 			</div>
+
 			<div class="form-group">
 				<textarea  rows="15" cols="60" id="chatbox" style="min-width:600px; min-height:200px; max-width:600px; display:none">{{response}}</textarea>
 				<div class="guess_bar"><input style="min-width: 450px;max-width: 450px" type="text" id="guess_input"></div>
@@ -51,9 +53,8 @@
 	    			<input type="button" id="btn" value="Watson" style="background-color: #4db8ff;border: none;color: white;padding: 5px 15px;text-align: center;text-decoration: none;display: inline-block;font-size: 16px; margin:2px; margin-bottom:0px; border-top-left-radius: 5px; border-top-right-radius: 5px">
 	    		</div>
 			</div>
-
 				<div style="min-width:700">
-					<iframe id='display_pdf' src='/static/pdfs/watson_inverted.gif' frameborder="1" width="700" height="500"></iframe>
+					<iframe id='display_pdf' src='/static/pdfs/watson_inverted.gif' frameborder="1" width="600" height="450"></iframe>
 					<div class="button_history_holder" style="min-height: 25px">
 						<div class="button_history" style="min-height: 25px;">
 						</div>
@@ -95,14 +96,21 @@
 			e.preventDefault();
 			$.ajax({
 			  type: "GET",
-			  url: "converse/",
-			  data: {'user_input': $("#user_input").val()}
+				url: "translate_input/",
+				data: {'user_input': $("#user_input").val(),'language': 'Spanish'}
 			}).done(function( resp ) {
 			   $("#chatbox").val($("#chatbox").val() + '\n\n' + $("#user_input").val());
 			   $("#chatbox").val($("#chatbox").val() + '\n\n' + resp);
 			   $("#conv_response").html(resp);
 			   $("#user_input").val('');
+			   var pp = resp;
+			   $.ajax({
+				  type: "GET",
+				  url: "speak/",
+				  data: {'user_input': pp}
+				});
 			});
+
 		}
 	});
 
@@ -146,7 +154,7 @@
 				}).done(function( resp_len ) {
 				   $("div.button_line").remove();
 				   $("div.buttons").append("<div class='button_line'></div>");
-				   for (i = 0; i < parseInt(resp_len); i++) { 
+				   for (i = 0; i < parseInt(resp_len); i++) {
 				   	$.ajax({
 					  type: "GET",
 					  url: "watson_button_label/",
@@ -160,7 +168,7 @@
 					        id: resp1,
 					        style: "background-color: #4CAF50;border: none;color: white;padding: 5px 15px;text-align: center;text-decoration: none;display: inline-block;font-size: 16px; margin:2px; margin-bottom:0px; border-top-left-radius: 5px; border-top-right-radius: 5px",
 					        value: resp1.substring(0, resp1.length-4),
-					        click: function () { 
+					        click: function () {
 					        	var x = this.id;
 					        	$.ajax({
 								  type: "GET",
@@ -179,7 +187,7 @@
 					        		id: x,
 					        		style: "background-color: #4CAF50;border: none;color: white;padding: 2px 6px;text-align: center;text-decoration: none;display: inline-block;font-size: 11px; margin:2px; margin-bottom:0px; border-radius: 5px",
 					        		value: x.substring(0, x.length-4),
-					        		click: function () { 
+					        		click: function () {
 					        			var x = this.id;
 					        			$.ajax({
 								  			type: "GET",
@@ -187,7 +195,7 @@
 								  			data: {'user_input': x}
 										}).done(function( resp1 ) {
 											$("#display_pdf").attr('src', "/static/pdfs/gen/"+x+"#toolbar=0&navpanes=0");
-									
+
 										});
 									}
 								});
@@ -225,7 +233,7 @@
 	        id: people[i],
 	        style: "background-color: #4CAF50;border: none;color: white;padding: 5px 15px;text-align: center;text-decoration: none;display: inline-block;font-size: 16px; margin:2px; margin-bottom:0px; border-radius: 5px",
 	        value: people[i],
-	        click: function () { 
+	        click: function () {
 	        	var x = this.id;
 	        	$.ajax({
 				  type: "GET",
@@ -257,7 +265,7 @@
         id: name,
         style: "background-color: #FF0000;border: none;color: white;padding: 5px 15px;text-align: center;text-decoration: none;display: inline-block;font-size: 16px; margin:2px; margin-bottom:0px; border-radius: 5px;",
         value: "Arrest Suspect",
-        click: function () { 
+        click: function () {
         	var name = $("#guess_input").val();
         	if (name !== ""){
 	        	$.ajax({
@@ -274,8 +282,47 @@
 			}
 		}
 	});
+
 	$('div.guess_bar').append(but_leave);
-	
+
+	var languages = ['en', 'da', 'es'];
+	var language_names = ['English', 'Dutch', 'Spanish'];
+	for(o = 0;o<languages.length;o++){
+		var name = language_names[o];
+	    var but = $('<input/>',
+	    {
+	        type: 'button',
+	        id: languages[o],
+	        style: "background-color: #4CAF50;border: none;color: white;padding: 5px 5px;text-align: center;text-decoration: none;display: inline-block;font-size: 16px; margin:2px; margin-bottom:0px; border-radius: 5px",
+	        value: name,
+	        click: function () {
+	        	var x = this.id;
+	        	$.ajax({
+				  type: "GET",
+				  url: "change_language/",
+				  data: {'user_input': x}
+				});
+			}
+		});
+		$('div.speak_bar').append(but);
+
+	}
+	var but_talk = $('<input/>',
+    {
+        type: 'button',
+        id: "toggle_speak",
+        style: "background-color: #FF0000;border: none;color: white;padding: 5px 15px;text-align: center;text-decoration: none;display: inline-block;font-size: 16px; margin:2px; margin-bottom:0px; border-radius: 5px;",
+        value: "Toggle Speak",
+        click: function () {
+        	$.ajax({
+			  type: "GET",
+			  url: "speak_switch/",
+			  data: {}
+			});
+		}
+	});
+	$('div.speak_bar').append(but_talk);
+
 </script>
 
 </body>
