@@ -69,6 +69,12 @@ def converse2(request):
 
 	return (json.dumps(response['output']['text'][0],indent=2)[1:-1])
 
+
+def change_language(request):
+	global language
+	language = request.GET.get('user_input')
+	return 1
+
 def speak(request):
 	global speaking
 	global language

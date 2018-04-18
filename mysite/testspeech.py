@@ -1,7 +1,6 @@
 from gtts import gTTS
 import pygame
 
-
 def speak_text(tosay, language):
 	tts = gTTS(text=tosay, lang=language, slow=False)
 	tts.save("test.mp3")
@@ -11,3 +10,4 @@ def speak_text(tosay, language):
 	pygame.mixer.music.play()
 	while pygame.mixer.music.get_busy() == True:
 	    continue
+

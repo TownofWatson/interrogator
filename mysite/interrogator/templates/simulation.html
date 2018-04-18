@@ -260,6 +260,28 @@
 
 	$('div.guess_bar').append(but_leave);
 
+	var languages = ['en', 'da', 'es'];
+	var language_names = ['English', 'Dutch', 'Spanish'];
+	for(o = 0;o<languages.length;o++){
+		var name = language_names[o];
+	    var but = $('<input/>',
+	    {
+	        type: 'button',
+	        id: languages[o],
+	        style: "background-color: #4CAF50;border: none;color: white;padding: 5px 5px;text-align: center;text-decoration: none;display: inline-block;font-size: 16px; margin:2px; margin-bottom:0px; border-radius: 5px",
+	        value: name,
+	        click: function () {
+	        	var x = this.id;
+	        	$.ajax({
+				  type: "GET",
+				  url: "change_language/",
+				  data: {'user_input': x}
+				});
+			}
+		});
+		$('div.speak_bar').append(but);
+
+	}
 	var but_talk = $('<input/>',
     {
         type: 'button',
