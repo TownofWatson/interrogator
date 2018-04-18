@@ -41,6 +41,7 @@
 				<div class="guess_bar"><input style="min-width: 450px;max-width: 450px" type="text" id="guess_input"></div>
 
 			</div>
+			<div class=language><label>Select an accent:</label></div>
 		</div>
 
 	    <div class="col-sm-6" >
@@ -259,16 +260,17 @@
 	});
 
 	$('div.guess_bar').append(but_leave);
-
-	var languages = ['en', 'da', 'es'];
-	var language_names = ['English', 'Dutch', 'Spanish'];
-	for(o = 0;o<languages.length;o++){
-		var name = language_names[o];
+	var pos_languages = ['af', 'sq', 'ar', 'hy', 'bn', 'ca', 'zh', 'hr', 'cs', 'da', 'nl', 'en', 'eo', 'fi', 'fr', 'de', 'el', 'hi', 'hu', 'is', 'id', 'it', 'ja', 'km', 'ko', 'la', 'lv', 'mk', 'no', 'pl', 'pt', 'ro', 'ru', 'sr', 'si', 'sk', 'es', 'sw', 'sv', 'ta', 'th', 'tr', 'uk', 'vi', 'cy'];
+	var pos_languages_names = ['Afrikaans', 'Albanian', 'Arabic', 'Armenian', 'Bengali', 'Catalan', 'Chinese', 'Croatian', 'Czech', 'Danish', 'Dutch', 'English', 'Esperanto', 'Finnish', 'French', 'German', 'Greek', 'Hindi', 'Hungarian', 'Icelandic', 'Indonesian', 'Italian', 'Japanese', 'Khmer', 'Korean', 'Latin', 'Latvian', 'Macedonian', 'Norwegian', 'Polish', 'Portuguese', 'Romanian', 'Russian', 'Serbian', 'Sinhala', 'Slovak', 'Spanish', 'Swahili', 'Swedish', 'Tamil', 'Thai', 'Turkish', 'Ukrainian', 'Vietnamese', 'Welsh'];
+	var languages = ['en', 'da', 'es','fr', 'sw'];
+	var languages_names = ['English', 'Dutch', 'Spanish', 'French', 'Swahili'];
+	for(o = 0;o<pos_languages.length;o++){
+		var name = pos_languages_names[o];
 	    var but = $('<input/>',
 	    {
 	        type: 'button',
-	        id: languages[o],
-	        style: "background-color: #4CAF50;border: none;color: white;padding: 5px 5px;text-align: center;text-decoration: none;display: inline-block;font-size: 16px; margin:2px; margin-bottom:0px; border-radius: 5px",
+	        id: pos_languages[o],
+	        style: "background-color: #4CAF50;border: none;color: white;padding: 2px 2px;text-align: center;text-decoration: none;display: inline-block;font-size: 11px; margin:2px; margin-bottom:0px; border-radius: 5px",
 	        value: name,
 	        click: function () {
 	        	var x = this.id;
@@ -279,7 +281,7 @@
 				});
 			}
 		});
-		$('div.speak_bar').append(but);
+		$('div.language').append(but);
 
 	}
 	var but_talk = $('<input/>',
