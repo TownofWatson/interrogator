@@ -9,6 +9,8 @@ import os.path
 import json
 from testspeech import *
 from watson import *
+import speech_recognition as sr
+
 conversation = ConversationV1(
 	username = 'a2f2135d-5741-4364-803b-66b8116a9b5f',
 	password = 'ldTcfTljOKKr',
@@ -82,7 +84,7 @@ def speak(request):
 	if(read.find(':') != -1 and speaking == True):
 		speak_text(read[read.find(':'):], language)
 
-	return 1
+	return 0
 
 def speak_switch(request):
 
@@ -153,4 +155,25 @@ def watson_button_respond(request):
 
 def watson_button(request):
 	success, response = ask_watson_response(request.GET.get('user_input'), extrac)
+	return HttpResponse(response)
+
+def get_speech(request):
+	time_to_speech = 5
+	time_of_speech = 10
+	# obtain audio from the microphone
+	r = sr.Recognizer()
+	r.adjust_for_ambient_noise
+	r.pause_threshold = 0.5
+	with sr.Microphone() as source:
+	    audio = r.listen(source,time_to_speech,time_of_speech)
+
+	# recognize speech using IBM Speech to Text
+	language = request.GET.get('language')
+	try:
+	    response = r.recognize_ibm(audio, username="f7439e9c-7d03-4c96-8fa7-cb792aeaa846", password="bTiV7BUg8ShR",language=language)
+	except sr.UnknownValueError:
+	    response = "IBM Speech to Text could not understand audio"
+	except sr.RequestError as e:
+		response = "Could not request results from IBM Speech to Text service; {0}".format(e)
+
 	return HttpResponse(response)
