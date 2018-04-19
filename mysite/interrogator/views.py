@@ -26,7 +26,7 @@ language_translator = LanguageTranslatorV2(
 workspace_id = '225a20b1-c3c2-429b-87ba-b389eefc8853'
 
 context = {}
-speaking = False
+speaking = True
 watson_state = 0
 extrac = []
 language = 'en'
