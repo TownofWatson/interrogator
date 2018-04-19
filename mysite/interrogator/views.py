@@ -134,6 +134,10 @@ def translate_input(request):
 	    	translation = language_translator.translate(text=sentence,model_id="es-en")
 	if language == 'fr':
 			translation = language_translator.translate(text=sentence,model_id="fr-en")
+	if language == 'ja':
+	 	       translation = language_translator.translate(text=sentence,model_id="ja-en")
+	if language == 'ko':
+	        	translation = language_translator.translate(text=sentence,model_id="ko-en")
 	if language == 'en':
 			translation = sentence
 
@@ -152,6 +156,10 @@ def translate_output(request):
 	    	translation = language_translator.translate(text=sentence,model_id="en-es")
 	if language == 'fr':
 			translation = language_translator.translate(text=sentence,model_id="en-fr")
+	if language == 'ja':
+	 	       translation = language_translator.translate(text=sentence,model_id="en-ja")
+	if language == 'ko':
+	        	translation = language_translator.translate(text=sentence,model_id="en-ko")
 	if language == 'en':
 			translation = sentence
 
