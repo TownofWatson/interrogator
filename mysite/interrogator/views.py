@@ -26,7 +26,7 @@ language_translator = LanguageTranslatorV2(
 workspace_id = '225a20b1-c3c2-429b-87ba-b389eefc8853'
 
 context = {}
-speaking = True
+speaking = False
 watson_state = 0
 extrac = []
 language = 'en'
@@ -183,6 +183,10 @@ def get_speech(request):
 		lang_code = 'es-ES'
 	if language == 'fr':
 		lang_code = 'fr-FR'
+	if language == 'ja':
+		lang_code = 'ja-JP'
+	if language == 'ko':
+		lang_code = 'ko-KR'
 
 	time_to_speech = 5
 	time_of_speech = 10
