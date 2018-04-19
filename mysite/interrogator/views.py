@@ -80,11 +80,11 @@ def change_language(request):
 def speak(request):
 	global speaking
 	global language
-	read = request.GET.get('user_input')
+	read = request
 	if(read.find(':') != -1 and speaking == True):
 		speak_text(read[read.find(':'):], language)
 
-	return HttpResponse()
+	return read
 
 def speak_switch(request):
 
@@ -123,24 +123,42 @@ def watson(request):
 	return HttpResponse(response)
 
 def translate_input(request):
-	#lang=raw_input("Choose a language: ")
 	sentence=request.GET.get('user_input')
 
-	language=request.GET.get('language')
+	global language
 	print(language)
 	print(sentence)
-	langEncoding=""
+	translation = ""
 
-	if language == 'Spanish':
+	if language == 'es':
 	    	translation = language_translator.translate(text=sentence,model_id="es-en")
-	if language == 'French':
+	if language == 'fr':
 			translation = language_translator.translate(text=sentence,model_id="fr-en")
-	if language == 'English':
+	if language == 'en':
 			translation = sentence
 
 	print(translation)
-	#response = json.dumps(translation['translations'])
 	return HttpResponse(converse2(translation))
+
+def translate_output(request):
+	sentence=request.GET.get('user_input')
+
+	global language
+	print(language)
+	print(sentence)
+	translation = ""
+
+	if language == 'es':
+	    	translation = language_translator.translate(text=sentence,model_id="en-es")
+	if language == 'fr':
+			translation = language_translator.translate(text=sentence,model_id="en-fr")
+	if language == 'en':
+			translation = sentence
+
+	print(translation)
+	afterSpeak = speak(translation)
+	print(afterSpeak)
+	return HttpResponse(afterSpeak)
 
 def watson_button_label(request):
 	return HttpResponse(extrac[int(request.GET.get('user_input'))])
