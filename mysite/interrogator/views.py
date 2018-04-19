@@ -80,11 +80,11 @@ def change_language(request):
 def speak(request):
 	global speaking
 	global language
-	read = request
+	read = request.GET.get('user_input')
 	if(read.find(':') != -1 and speaking == True):
 		speak_text(read[read.find(':'):], language)
 
-	return read
+	return HttpResponse()
 
 def speak_switch(request):
 
@@ -138,10 +138,10 @@ def translate_input(request):
 			translation = sentence
 
 	print(translation)
-	return HttpResponse(converse2(translation))
+	return HttpResponse(translate_output(converse2(translation)))
 
 def translate_output(request):
-	sentence=request.GET.get('user_input')
+	sentence=request
 
 	global language
 	print(language)
@@ -156,9 +156,9 @@ def translate_output(request):
 			translation = sentence
 
 	print(translation)
-	afterSpeak = speak(translation)
-	print(afterSpeak)
-	return HttpResponse(afterSpeak)
+	#afterSpeak = speak(translation)
+	#print(afterSpeak)
+	return translation
 
 def watson_button_label(request):
 	return HttpResponse(extrac[int(request.GET.get('user_input'))])
@@ -176,6 +176,14 @@ def watson_button(request):
 	return HttpResponse(response)
 
 def get_speech(request):
+	# get language
+	lang_code = request.GET.get('language')
+	global language
+	if language == 'es':
+		lang_code = 'es-ES'
+	if language == 'fr':
+		lang_code = 'fr-FR'
+
 	time_to_speech = 5
 	time_of_speech = 10
 	# obtain audio from the microphone
@@ -186,9 +194,8 @@ def get_speech(request):
 	    audio = r.listen(source,time_to_speech,time_of_speech)
 
 	# recognize speech using IBM Speech to Text
-	language = request.GET.get('language')
 	try:
-	    response = r.recognize_ibm(audio, username="f7439e9c-7d03-4c96-8fa7-cb792aeaa846", password="bTiV7BUg8ShR",language=language)
+	    response = r.recognize_ibm(audio, username="f7439e9c-7d03-4c96-8fa7-cb792aeaa846", password="bTiV7BUg8ShR",language=lang_code)
 	except sr.UnknownValueError:
 	    response = "IBM Speech to Text could not understand audio"
 	except sr.RequestError as e:
