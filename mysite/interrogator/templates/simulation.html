@@ -299,6 +299,7 @@
 	var pos_languages_names = ['English', 'French', 'Japanese', 'Korean', 'Spanish'];
 	var languages = ['en', 'da', 'es','fr', 'sw'];
 	var languages_names = ['English', 'Dutch', 'Spanish', 'French', 'Swahili'];
+	var lan_buts = [];
 	for(o = 0;o<pos_languages.length;o++){
 		var name = pos_languages_names[o];
 	    var but = $('<input/>',
@@ -314,11 +315,15 @@
 				  url: "change_language/",
 				  data: {'user_input': x}
 				});
+				$('div.language').children().css("border", "0px");
+				$( '#'+x).css("border", "2px solid blue");
+
 			}
 		});
 		$('div.language').append(but);
 
 	}
+	$('#en').css("border", "2px solid blue");
 
   $(function() {
     $('#toggle-event').change(function() {
