@@ -123,24 +123,50 @@ def watson(request):
 	return HttpResponse(response)
 
 def translate_input(request):
-	#lang=raw_input("Choose a language: ")
 	sentence=request.GET.get('user_input')
 
-	language=request.GET.get('language')
+	global language
 	print(language)
 	print(sentence)
-	langEncoding=""
+	translation = ""
 
-	if language == 'Spanish':
+	if language == 'es':
 	    	translation = language_translator.translate(text=sentence,model_id="es-en")
-	if language == 'French':
+	if language == 'fr':
 			translation = language_translator.translate(text=sentence,model_id="fr-en")
-	if language == 'English':
+	if language == 'ja':
+	 	       translation = language_translator.translate(text=sentence,model_id="ja-en")
+	if language == 'ko':
+	        	translation = language_translator.translate(text=sentence,model_id="ko-en")
+	if language == 'en':
 			translation = sentence
 
 	print(translation)
-	#response = json.dumps(translation['translations'])
-	return HttpResponse(converse2(translation))
+	return HttpResponse(translate_output(converse2(translation)))
+
+def translate_output(request):
+	sentence=request
+
+	global language
+	print(language)
+	print(sentence)
+	translation = ""
+
+	if language == 'es':
+	    	translation = language_translator.translate(text=sentence,model_id="en-es")
+	if language == 'fr':
+			translation = language_translator.translate(text=sentence,model_id="en-fr")
+	if language == 'ja':
+	 	       translation = language_translator.translate(text=sentence,model_id="en-ja")
+	if language == 'ko':
+	        	translation = language_translator.translate(text=sentence,model_id="en-ko")
+	if language == 'en':
+			translation = sentence
+
+	print(translation)
+	#afterSpeak = speak(translation)
+	#print(afterSpeak)
+	return translation
 
 def watson_button_label(request):
 	return HttpResponse(extrac[int(request.GET.get('user_input'))])
@@ -158,6 +184,18 @@ def watson_button(request):
 	return HttpResponse(response)
 
 def get_speech(request):
+	# get language
+	lang_code = request.GET.get('language')
+	global language
+	if language == 'es':
+		lang_code = 'es-ES'
+	if language == 'fr':
+		lang_code = 'fr-FR'
+	if language == 'ja':
+		lang_code = 'ja-JP'
+	if language == 'ko':
+		lang_code = 'ko-KR'
+
 	time_to_speech = 5
 	time_of_speech = 10
 	# obtain audio from the microphone
@@ -168,9 +206,8 @@ def get_speech(request):
 	    audio = r.listen(source,time_to_speech,time_of_speech)
 
 	# recognize speech using IBM Speech to Text
-	language = request.GET.get('language')
 	try:
-	    response = r.recognize_ibm(audio, username="f7439e9c-7d03-4c96-8fa7-cb792aeaa846", password="bTiV7BUg8ShR",language=language)
+	    response = r.recognize_ibm(audio, username="f7439e9c-7d03-4c96-8fa7-cb792aeaa846", password="bTiV7BUg8ShR",language=lang_code)
 	except sr.UnknownValueError:
 	    response = "IBM Speech to Text could not understand audio"
 	except sr.RequestError as e:

@@ -17,4 +17,6 @@ urlpatterns = [
     path('simulation/change_language/', views.change_language, name='change_language'),
     path('simulation/watson_button_length/', views.watson_button_length, name='watson_button_length'),
     path('simulation/translate_input/', views.translate_input, name='translate_input'),
+    path('simulation/translate_output/', views.translate_output, name='translate_output'),
+
 ]
