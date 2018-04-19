@@ -98,7 +98,7 @@
 			$.ajax({
 			  type: "GET",
 				url: "translate_input/",
-				data: {'user_input': $("#user_input").val(),'language': 'Spanish'}
+				data: {'user_input': $("#user_input").val(),'language': 'English'}
 			}).done(function( resp ) {
 			   $("#chatbox").val($("#chatbox").val() + '\n\n' + $("#user_input").val());
 			   $("#chatbox").val($("#chatbox").val() + '\n\n' + resp);
@@ -128,7 +128,7 @@
 			$.ajax({
 			  type: "GET",
 				url: "translate_input/",
-				data: {'user_input': $("#user_input").val(),'language': 'Spanish'}
+				data: {'user_input': $("#user_input").val(),'language': 'English'}
 			}).done(function( resp ) {
 			   $("#chatbox").val($("#chatbox").val() + '\n\n' + $("#user_input").val());
 			   $("#chatbox").val($("#chatbox").val() + '\n\n' + resp);

@@ -29,7 +29,7 @@ context = {}
 speaking = True
 watson_state = 0
 extrac = []
-language = 'fr'
+language = 'en'
 
 # Create your views here.
 def index(request):
@@ -75,7 +75,7 @@ def converse2(request):
 def change_language(request):
 	global language
 	language = request.GET.get('user_input')
-	return 1
+	return HttpResponse()
 
 def speak(request):
 	global speaking
@@ -84,14 +84,14 @@ def speak(request):
 	if(read.find(':') != -1 and speaking == True):
 		speak_text(read[read.find(':'):], language)
 
-	return 0
+	return HttpResponse()
 
 def speak_switch(request):
 
 	global speaking
 	speaking = not speaking
 
-	return 1
+	return HttpResponse()
 
 def converse_person_change(request):
 	name = request.GET.get('user_input')
